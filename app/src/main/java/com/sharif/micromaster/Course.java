@@ -1,5 +1,7 @@
 package com.sharif.micromaster;
 
+import androidx.room.Entity;
+
 import java.util.ArrayList;
 
 public class Course {
