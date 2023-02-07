@@ -1,5 +1,8 @@
 package com.sharif.micromaster;
 
+import static com.sharif.micromaster.BitmapHelper.drawableToBitmap;
+import static com.sharif.micromaster.BitmapHelper.getBytesFromBitmap;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
@@ -101,27 +104,5 @@ public class RegisterActivity extends AppCompatActivity {
         register = findViewById(R.id.register_button);
     }
 
-    public byte[] getBytesFromBitmap(Bitmap bitmap) {
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream);
-        return stream.toByteArray();
-    }
 
-    public Bitmap getBitmapFromBytes(byte[] bytes) {
-        return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-    }
-
-    public Bitmap drawableToBitmap (Drawable drawable) {
-
-        if (drawable instanceof BitmapDrawable) {
-            return ((BitmapDrawable)drawable).getBitmap();
-        }
-
-        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-        drawable.draw(canvas);
-
-        return bitmap;
-    }
 }

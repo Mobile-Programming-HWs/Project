@@ -16,13 +16,13 @@
         android:text="Course Name" />
 
     <TextView
-        android:id="@+id/course_lecturer"
+        android:id="@+id/course_teacher"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="69dp"
-        android:text="Lecturer" />
+        android:text="Teacher" />
 
     <TextView
         android:id="@+id/course_units"
@@ -39,7 +39,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="153dp"
+        android:layout_marginTop="212dp"
         android:text="Description" />
 
     <Button
@@ -50,13 +50,4 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="317dp"
         android:text="Enroll" />
-
-    <Button
-        android:id="@+id/requestTA"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="277dp"
-        android:text="Request to become TA" />
 </RelativeLayout>

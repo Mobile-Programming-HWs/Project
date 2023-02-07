@@ -5,7 +5,7 @@ import android.content.Context;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-@androidx.room.Database(entities = {User.class, CourseDB.class, Homework.class, LoggedInUser.class}, version = 3, exportSchema = false)
+@androidx.room.Database(entities = {User.class, Course.class, Homework.class, LoggedInUser.class, TA.class}, version = 4, exportSchema = false)
 public abstract class Database extends RoomDatabase {
     public abstract UserDao UserDao();
 
@@ -14,6 +14,8 @@ public abstract class Database extends RoomDatabase {
     public abstract LoggedInUserDao LoggedInUserDao();
 
     public abstract HomeworkDao HomeworkDao();
+
+    public abstract TADao TADao();
 
     private static volatile Database INSTANCE;
 

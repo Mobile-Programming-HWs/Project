@@ -1,13 +1,16 @@
 package com.sharif.micromaster;
 
+import static com.sharif.micromaster.BitmapHelper.drawableToBitmap;
+import static com.sharif.micromaster.BitmapHelper.getBytesFromBitmap;
+
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
-import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class AddCourseActivity extends AppCompatActivity {
 
@@ -16,21 +19,26 @@ public class AddCourseActivity extends AppCompatActivity {
     EditText description;
     Button submit;
     Button cancel;
-    SharedPreferences sharedPreferences;
+    Database db;
+    Bitmap bitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_course);
+        db = Database.getInstance(this);
         findViews();
-        sharedPreferences = this.getSharedPreferences("logged", Context.MODE_PRIVATE);
-        String loggedIn = sharedPreferences.getString("logged", "DEFAULT");
         submit.setOnClickListener(view -> {
             if (name.getText().toString().isEmpty() || units.getText().toString().isEmpty()) {
                 return;
             }
-            Course.courses.add(new Course(R.drawable.ic_launcher_foreground, units.getText().toString(),
-                    name.getText().toString(), description.getText().toString(), loggedIn));
+            User loggedIn = db.UserDao().getUserById(db.LoggedInUserDao().user().getUserID());
+            Drawable d = getResources().getDrawable(R.drawable.ic_launcher_foreground);
+            bitmap = drawableToBitmap(d);
+            Course course = new Course(loggedIn.getId(), name.getText().toString(), description.getText().toString(),
+                    Integer.parseInt(units.getText().toString()), getBytesFromBitmap(bitmap));
+            db.CourseDao().insert(course);
+            Toast.makeText(this, "Success!", Toast.LENGTH_SHORT).show();
             finish();
         });
         cancel.setOnClickListener(view -> finish());

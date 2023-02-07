@@ -1,66 +1,87 @@
 package com.sharif.micromaster;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
-import java.util.ArrayList;
-
+@Entity(tableName = "courses")
 public class Course {
-    public static ArrayList<Course> courses = new ArrayList<>();
-    static int instances = 0;
 
-    int id, image;
-    String name, lecturer, description, units;
+    @PrimaryKey(autoGenerate = true)
+    @NonNull
+    private int id;
 
-    public Course() {
-    }
+    @NonNull
+    private int teacherID;
 
-    public String getLecturer() {
-        return lecturer;
-    }
+    @NonNull
+    private String name;
 
-    public void setLecturer(String lecturer) {
-        this.lecturer = lecturer;
-    }
+    @NonNull
+    private String description;
 
-    public Course(int image, String units, String name, String description, String lecturer) {
-        this.image = image;
-        this.units = units;
+    @NonNull
+    private int units;
+
+    public Course(int teacherID, @NonNull String name, @NonNull String description, int units, @NonNull byte[] image) {
+        this.teacherID = teacherID;
         this.name = name;
         this.description = description;
-        this.lecturer = lecturer;
-        this.id = instances;
-        instances++;
-    }
-
-    public int getImage() {
-        return image;
-    }
-
-    public void setImage(int image) {
+        this.units = units;
         this.image = image;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getTeacherID() {
+        return teacherID;
+    }
+
+    public void setTeacherID(int teacherID) {
+        this.teacherID = teacherID;
+    }
+
+    @NonNull
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(@NonNull String name) {
         this.name = name;
     }
 
-    public String getUnits() {
-        return units;
-    }
-
-    public void setUnits(String units) {
-        this.units = units;
-    }
-
+    @NonNull
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
+    public void setDescription(@NonNull String description) {
         this.description = description;
     }
+
+    public int getUnits() {
+        return units;
+    }
+
+    public void setUnits(int units) {
+        this.units = units;
+    }
+
+    @NonNull
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(@NonNull byte[] image) {
+        this.image = image;
+    }
+
+    @NonNull
+    private byte[] image;
 }

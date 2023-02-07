@@ -2,6 +2,7 @@ package com.sharif.micromaster;
 
 
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,10 +18,12 @@ import java.util.List;
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHolder> {
     //create a list to pass our Model class
     List<Course> courseList;
+    Database db;
     Context context;
     public CustomAdapter(List<Course> courseList, Context context) {
         this.courseList = courseList;
         this.context = context;
+        db = Database.getInstance(context);
     }
     @NonNull
     @Override
@@ -37,10 +40,10 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         final Course course = courseList.get(position);
         holder.name.setText(course.getName());
         holder.description.setText(course.getDescription());
-        holder.imageView.setImageDrawable(context.getResources().getDrawable(course.getImage()));
-        holder.units.setText(course.getUnits());
-        holder.lecturer.setText(course.getLecturer());
-
+        holder.imageView.setImageBitmap(BitmapFactory.decodeByteArray(course.getImage(), 0, course.getImage().length));
+        holder.units.setText(String.valueOf(course.getUnits()));
+        User user = db.UserDao().getUserById(course.getTeacherID());
+        holder.lecturer.setText(user.getName());
     }
     @Override
     public int getItemCount() {
