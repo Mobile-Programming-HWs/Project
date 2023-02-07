@@ -6,9 +6,9 @@ import androidx.room.PrimaryKey;
 
 @Entity(tableName = "logged_in_user")
 public class LoggedInUser {
-    @PrimaryKey
-    @NonNull
-    private int userID;
+    public LoggedInUser(int userID) {
+        this.userID = userID;
+    }
 
     public int getUserID() {
         return userID;
@@ -18,7 +18,10 @@ public class LoggedInUser {
         this.userID = userID;
     }
 
-    public LoggedInUser(int userID) {
-        this.userID = userID;
-    }
+    @PrimaryKey
+    @NonNull
+    private int userID;
+
+
+
 }

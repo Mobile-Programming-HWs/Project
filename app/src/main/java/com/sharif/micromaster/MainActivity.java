@@ -2,9 +2,7 @@ package com.sharif.micromaster;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,37 +10,31 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
-    private EditText email;
-    private EditText password;
+    private EditText emailView;
+    private EditText passwordView;
     private Button login;
     private Button register;
-    SharedPreferences sharedPreferences;
-    SharedPreferences loggedInPreferences;
-    SharedPreferences.Editor editor;
-    SharedPreferences.Editor loggedInEditor;
+    Database db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         findViews();
-        sharedPreferences = this.getSharedPreferences("users", Context.MODE_PRIVATE);
-        loggedInPreferences = this.getSharedPreferences("logged", Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
-        loggedInEditor = loggedInPreferences.edit();
+        db = Database.getInstance(this);
         login.setOnClickListener(view -> {
             boolean isValid = true;
-            if (email.getText().toString().isEmpty()) {
-                email.setError("Please enter email");
+            if (emailView.getText().toString().isEmpty()) {
+                emailView.setError("Please enter email");
                 isValid = false;
             }
-            if (password.getText().toString().isEmpty()) {
-                password.setError("Please enter password");
+            if (passwordView.getText().toString().isEmpty()) {
+                passwordView.setError("Please enter password");
                 isValid = false;
             }
             if (!isValid)
                 return;
-            login(email.getText().toString(), password.getText().toString());
+            login(emailView.getText().toString(), passwordView.getText().toString());
 
         });
         register.setOnClickListener(view -> {
@@ -52,24 +44,26 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void login(String email, String password) {
-        if (!sharedPreferences.contains(email)) {
+        User user = db.UserDao().getUser(emailView.getText().toString());
+        if (user == null) {
             Toast.makeText(MainActivity.this, "Entered email does not exist!", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (!password.equals(sharedPreferences.getString("users", email))) {
+        if (!password.equals(user.getPassword())) {
             Toast.makeText(MainActivity.this, "Incorrect password!", Toast.LENGTH_SHORT).show();
             return;
         }
         Toast.makeText(MainActivity.this, "Success!", Toast.LENGTH_SHORT).show();
-        loggedInEditor.putString("logged", email);
+        db.LoggedInUserDao().deleteAll();
+        db.LoggedInUserDao().insert(new LoggedInUser(user.getId()));
         Intent intent = new Intent(this, CoursesListActivity.class);
         startActivity(intent);
     }
 
 
     private void findViews() {
-        email = findViewById(R.id.email);
-        password = findViewById(R.id.password);
+        emailView = findViewById(R.id.email);
+        passwordView = findViewById(R.id.password);
         login = findViewById(R.id.login);
         register = findViewById(R.id.register);
     }
