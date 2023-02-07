@@ -16,7 +16,7 @@ public interface CourseDao {
     @Update
     int update(Course course);
 
-    @Query("SELECT * FROM courses")
+    @Query("SELECT * FROM courses ORDER BY id")
     List<Course> getCourses();
 
     @Query("SELECT * FROM courses WHERE id = :id")

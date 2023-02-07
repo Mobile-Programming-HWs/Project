@@ -66,6 +66,7 @@ public class RegisterActivity extends AppCompatActivity {
                         type, getBytesFromBitmap(bitmap));
                 db.UserDao().insert(user);
                 Toast.makeText(RegisterActivity.this, "Success!", Toast.LENGTH_SHORT).show();
+                finish();
             }
         });
         upload.setOnClickListener(view -> {
