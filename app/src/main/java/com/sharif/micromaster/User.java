@@ -26,9 +26,9 @@ public class User {
 
     private String name;
     private int userType; // 0 = teacher, 1 = TA, 2 = student
-    private byte[] image;
+    private String image;
 
-    public User(@NonNull String email, @NonNull String password, String name, int userType, byte[] image) {
+    public User(@NonNull String email, @NonNull String password, String name, int userType, String image) {
         this.email = email;
         this.password = password;
         this.name = name;
@@ -70,11 +70,11 @@ public class User {
         this.userType = userType;
     }
 
-    public byte[] getImage() {
+    public String getImage() {
         return image;
     }
 
-    public void setImage(byte[] image) {
+    public void setImage(String image) {
         this.image = image;
     }
 }

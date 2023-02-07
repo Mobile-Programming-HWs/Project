@@ -40,7 +40,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         final Course course = courseList.get(position);
         holder.name.setText(course.getName());
         holder.description.setText(course.getDescription());
-        holder.imageView.setImageBitmap(BitmapFactory.decodeByteArray(course.getImage(), 0, course.getImage().length));
+        holder.imageView.setImageBitmap(BitmapHelper.stringToBitmap(course.getImage()));
         holder.units.setText(String.valueOf(course.getUnits()));
         User user = db.UserDao().getUserById(course.getTeacherID());
         holder.lecturer.setText(user.getName());

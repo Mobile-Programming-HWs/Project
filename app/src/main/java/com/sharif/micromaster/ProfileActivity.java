@@ -1,22 +1,36 @@
 package com.sharif.micromaster;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.google.android.material.navigation.NavigationView;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     TextView name;
     TextView email;
     RecyclerView recyclerView;
+    de.hdodenhof.circleimageview.CircleImageView imageView;
     List<Course> courseList;
     RecyclerView.Adapter adapter;
+    DrawerLayout drawerLayout;
+    NavigationView navigationView;
+    ActionBarDrawerToggle toggle;
     Database db;
 
     @Override
@@ -24,12 +38,18 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         db = Database.getInstance(this);
+        findViews();
+        navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setCheckedItem(R.id.item2);
+        toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         User loggedIn = db.UserDao().getUserById(db.LoggedInUserDao().user().getUserID());
-        name = findViewById(R.id.profile_name);
+        Log.d("aaaaaa", String.valueOf(BitmapHelper.stringToBitmap(loggedIn.getImage())));
+        //imageView.setImageBitmap(BitmapHelper.stringToBitmap(loggedIn.getImage()));
         name.setText(loggedIn.getName());
-        email = findViewById(R.id.profile_email);
         email.setText(loggedIn.getEmail());
-        recyclerView = findViewById(R.id.profile_courses);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         courseList = new ArrayList<>();
@@ -40,5 +60,32 @@ public class ProfileActivity extends AppCompatActivity {
         }
         adapter = new CustomAdapter(courseList, getApplicationContext());
         recyclerView.setAdapter(adapter);
+    }
+
+    private void findViews() {
+        name = findViewById(R.id.profile_name);
+        email = findViewById(R.id.profile_email);
+        recyclerView = findViewById(R.id.profile_courses);
+        recyclerView = findViewById(R.id.profile_courses);
+        drawerLayout = findViewById(R.id.profile_drawer);
+        navigationView = findViewById(R.id.nav_prof);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (toggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.item1) {
+            finish();
+        }
+        return true;
     }
 }

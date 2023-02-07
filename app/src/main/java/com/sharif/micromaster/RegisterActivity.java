@@ -1,12 +1,14 @@
 package com.sharif.micromaster;
 
 import static com.sharif.micromaster.BitmapHelper.drawableToBitmap;
-import static com.sharif.micromaster.BitmapHelper.getBytesFromBitmap;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -36,6 +38,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     Button upload;
     Button register;
+    Button take;
     Database db;
     Bitmap bitmap;
 
@@ -63,7 +66,7 @@ public class RegisterActivity extends AppCompatActivity {
                 Toast.makeText(this, "This email is already registered!", Toast.LENGTH_SHORT).show();
             } else {
                 user = new User(email.getText().toString(), password.getText().toString(), name.getText().toString(),
-                        type, getBytesFromBitmap(bitmap));
+                        type, BitmapHelper.bitmapToString(bitmap));
                 db.UserDao().insert(user);
                 Toast.makeText(RegisterActivity.this, "Success!", Toast.LENGTH_SHORT).show();
                 finish();
@@ -73,6 +76,15 @@ public class RegisterActivity extends AppCompatActivity {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.setType("image/*");
             startActivityForResult(intent, 1);
+        });
+        take.setOnClickListener(view -> {
+            if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
+            {
+                requestPermissions(new String[]{Manifest.permission.CAMERA}, 100);
+            } else {
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(intent, 2);
+            }
         });
     }
 
@@ -93,6 +105,29 @@ public class RegisterActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+        if (requestCode == 2 && resultCode == Activity.RESULT_OK) {
+            Bitmap photo = (Bitmap) data.getExtras().get("data");
+            imageView.setImageBitmap(photo);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
+    {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 100)
+        {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
+            {
+                Toast.makeText(this, "camera permission granted", Toast.LENGTH_LONG).show();
+                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(cameraIntent, 2);
+            }
+            else
+            {
+                Toast.makeText(this, "camera permission denied", Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
     private void findViews() {
@@ -103,6 +138,7 @@ public class RegisterActivity extends AppCompatActivity {
         imageView = findViewById(R.id.profile_image_upload);
         upload = findViewById(R.id.upload_img);
         register = findViewById(R.id.register_button);
+        take = findViewById(R.id.take_img);
     }
 
 

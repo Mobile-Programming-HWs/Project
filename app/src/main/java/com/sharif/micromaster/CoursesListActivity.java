@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
@@ -69,8 +70,13 @@ public class CoursesListActivity extends AppCompatActivity implements Navigation
         );
 
         fab.setOnClickListener(view -> {
-            Intent intent = new Intent(this, AddCourseActivity.class);
-            startActivityForResult(intent, 11);
+            User loggedIn = db.UserDao().getUserById(db.LoggedInUserDao().user().getUserID());
+            if (loggedIn.getUserType() == 0) {
+                Intent intent = new Intent(this, AddCourseActivity.class);
+                startActivityForResult(intent, 11);
+            } else {
+                Toast.makeText(CoursesListActivity.this, "You have to be a teacher to add a course!", Toast.LENGTH_SHORT).show();
+            }
         });
 
 

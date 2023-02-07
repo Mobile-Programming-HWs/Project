@@ -25,3 +25,4 @@ public interface TADao {
     @Delete
     void delete(TA ta);
 }
+

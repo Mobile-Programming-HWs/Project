@@ -1,7 +1,6 @@
 package com.sharif.micromaster;
 
 import static com.sharif.micromaster.BitmapHelper.drawableToBitmap;
-import static com.sharif.micromaster.BitmapHelper.getBytesFromBitmap;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -36,7 +35,7 @@ public class AddCourseActivity extends AppCompatActivity {
             Drawable d = getResources().getDrawable(R.drawable.ic_launcher_foreground);
             bitmap = drawableToBitmap(d);
             Course course = new Course(loggedIn.getId(), name.getText().toString(), description.getText().toString(),
-                    Integer.parseInt(units.getText().toString()), getBytesFromBitmap(bitmap));
+                    Integer.parseInt(units.getText().toString()), BitmapHelper.bitmapToString(bitmap));
             db.CourseDao().insert(course);
             Toast.makeText(this, "Success!", Toast.LENGTH_SHORT).show();
             finish();

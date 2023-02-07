@@ -92,9 +92,20 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="104dp"
-        android:layout_marginBottom="169dp"
+        android:layout_marginEnd="133dp"
+        android:layout_marginBottom="167dp"
         android:text="Upload"
+        android:textSize="10sp" />
+
+    <Button
+        android:id="@+id/take_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="28dp"
+        android:layout_marginBottom="166dp"
+        android:text="Take"
         android:textSize="10sp" />
 
     <Button

@@ -23,7 +23,7 @@ public class Course {
     @NonNull
     private int units;
 
-    public Course(int teacherID, @NonNull String name, @NonNull String description, int units, @NonNull byte[] image) {
+    public Course(int teacherID, @NonNull String name, @NonNull String description, int units, @NonNull String image) {
         this.teacherID = teacherID;
         this.name = name;
         this.description = description;
@@ -74,14 +74,14 @@ public class Course {
     }
 
     @NonNull
-    public byte[] getImage() {
+    public String getImage() {
         return image;
     }
 
-    public void setImage(@NonNull byte[] image) {
+    public void setImage(@NonNull String image) {
         this.image = image;
     }
 
     @NonNull
-    private byte[] image;
+    private String image;
 }

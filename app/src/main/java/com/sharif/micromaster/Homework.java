@@ -13,13 +13,29 @@ public class Homework {
     @NonNull
     private int courseID;
 
-    private String description;
-    private String pdfLinks;
+    @NonNull
+    private String creator;
 
-    public Homework(int courseID, String description, String pdfLinks) {
+    @NonNull
+    private String pdfLink;
+
+    private String description;
+
+    public Homework(int id, int courseID, @NonNull String creator, String description, @NonNull String pdfLink) {
+        this.id = id;
         this.courseID = courseID;
+        this.creator = creator;
         this.description = description;
-        this.pdfLinks = pdfLinks;
+        this.pdfLink = pdfLink;
+    }
+
+    @NonNull
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(@NonNull String creator) {
+        this.creator = creator;
     }
 
     public int getId() {
@@ -46,11 +62,11 @@ public class Homework {
         this.description = description;
     }
 
-    public String getPdfLinks() {
-        return pdfLinks;
+    public String getPdfLink() {
+        return pdfLink;
     }
 
-    public void setPdfLinks(String pdfLinks) {
-        this.pdfLinks = pdfLinks;
+    public void setPdfLink(String pdfLink) {
+        this.pdfLink = pdfLink;
     }
 }
