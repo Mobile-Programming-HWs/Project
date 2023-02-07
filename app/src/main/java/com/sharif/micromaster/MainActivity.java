@@ -46,29 +46,9 @@ public class MainActivity extends AppCompatActivity {
 
         });
         register.setOnClickListener(view -> {
-            boolean isValid = true;
-            if (email.getText().toString().isEmpty()) {
-                email.setError("Please enter email");
-                isValid = false;
-            }
-            if (password.getText().toString().isEmpty()) {
-                password.setError("Please enter password");
-                isValid = false;
-            }
-            if (!isValid)
-                return;
-            register(email.getText().toString(), password.getText().toString());
+            Intent intent = new Intent(this, RegisterActivity.class);
+            startActivity(intent);
         });
-    }
-
-    private void register(String email, String password) {
-        if (sharedPreferences.contains(email)) {
-            Toast.makeText(MainActivity.this, "This email is already registered!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        editor.putString(email, password);
-        editor.apply();
-        Toast.makeText(MainActivity.this, "Success!", Toast.LENGTH_SHORT).show();
     }
 
     private void login(String email, String password) {

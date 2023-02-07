@@ -7,7 +7,7 @@ import androidx.room.OnConflictStrategy;
 
 @Dao
 public interface HomeworkDao {
-    @Insert(onConflict = OnConflictStrategy.ABORT)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     long insert(Homework homework);
 
     @Delete

@@ -7,7 +7,7 @@ import androidx.room.Update;
 
 @Dao
 public interface CourseDao {
-    @Insert(onConflict = OnConflictStrategy.ABORT)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     long insert(CourseDB courseDB);
 
     @Update
