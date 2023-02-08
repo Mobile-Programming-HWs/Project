@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cardView"
     android:layout_width="match_parent"
-    android:layout_height="350dp"
+    android:layout_height="335dp"
     app:cardBackgroundColor="@android:color/white"
     app:cardCornerRadius="8dp"
     app:cardElevation="5dp"
@@ -15,90 +15,90 @@
     <RelativeLayout
         android:id="@+id/item"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="300dp">
 
         <ImageView
+            android:id="@+id/image"
             android:layout_width="match_parent"
-        android:layout_height="180dp"
-        android:scaleType="centerCrop"
-        android:id="@+id/image"
-        android:src="@drawable/ic_launcher_background"
-        android:contentDescription="CardImageViewDesc" />
+            android:layout_height="180dp"
+            android:contentDescription="CardImageViewDesc"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_launcher_background" />
 
         <TextView
             android:id="@+id/name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/image"
-        android:layout_marginStart="5dp"
-        android:fontFamily="sans-serif"
-        android:gravity="center_vertical"
-        android:text="LOREM IPSUM"
-        android:textSize="17sp"
-        android:textStyle="bold"
-        android:layout_marginTop="8dp"
-        android:textColor="@android:color/black"/>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/image"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="8dp"
+            android:fontFamily="sans-serif"
+            android:gravity="center_vertical"
+            android:text="LOREM IPSUM"
+            android:textColor="@android:color/black"
+            android:textSize="17sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/lecturer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/name"
-            android:layout_marginLeft="5dp"
             android:layout_marginStart="5dp"
+            android:layout_marginLeft="5dp"
             android:layout_marginTop="2dp"
+            android:layout_toStartOf="@+id/imageButton"
             android:fontFamily="sans-serif"
             android:gravity="center_vertical"
-            android:text="The person"
-            android:textStyle="italic"
-            android:textSize="15sp"
             android:maxLines="2"
-            android:layout_toStartOf="@+id/imageButton"/>
+            android:text="The person"
+            android:textSize="15sp"
+            android:textStyle="italic" />
 
         <TextView
             android:id="@+id/units"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/lecturer"
-            android:layout_marginLeft="5dp"
             android:layout_marginStart="5dp"
+            android:layout_marginLeft="5dp"
             android:layout_marginTop="2dp"
+            android:layout_toStartOf="@+id/imageButton"
             android:fontFamily="sans-serif"
             android:gravity="center_vertical"
-            android:text="3 units"
-            android:textStyle="italic"
-            android:textSize="15sp"
             android:maxLines="2"
-            android:layout_toStartOf="@+id/imageButton"/>
+            android:text="3 units"
+            android:textSize="15sp"
+            android:textStyle="italic" />
 
         <TextView
             android:id="@+id/description"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/units"
-        android:layout_marginLeft="5dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="2dp"
-        android:fontFamily="sans-serif"
-        android:gravity="center_vertical"
-        android:text="Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries for previewing layouts and visual mockups."
-        android:textStyle="italic"
-        android:textSize="15sp"
-        android:maxLines="2"
-        android:layout_toStartOf="@+id/imageButton"/>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/units"
+            android:layout_marginStart="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="2dp"
+            android:layout_toStartOf="@+id/imageButton"
+            android:fontFamily="sans-serif"
+            android:gravity="center_vertical"
+            android:maxLines="2"
+            android:text="Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries for previewing layouts and visual mockups."
+            android:textSize="15sp"
+            android:textStyle="italic" />
 
         <ImageButton
             android:id="@+id/imageButton"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:src="@drawable/ic_launcher_foreground"
-        android:layout_below="@id/image"
-        android:layout_marginRight="5dp"
-        android:layout_marginEnd="5dp"
-        android:contentDescription="FavButtonDesc" />
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_below="@id/image"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginEnd="5dp"
+            android:layout_marginRight="5dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="FavButtonDesc"
+            android:src="@drawable/ic_launcher_foreground" />
 
     </RelativeLayout>
 
