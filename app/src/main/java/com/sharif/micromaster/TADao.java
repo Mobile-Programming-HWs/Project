@@ -22,6 +22,9 @@ public interface TADao {
     @Query("SELECT * FROM ta WHERE id = :id")
     TA getTAById(int id);
 
+    @Query("SELECT * FROM ta WHERE courseId = :courseId AND userId = :userId")
+    TA getRelation(int courseId, int userId);
+
     @Delete
     void delete(TA ta);
 }

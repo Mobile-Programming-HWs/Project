@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -52,10 +53,27 @@ public class CourseActivity extends AppCompatActivity {
             }
         }
         if (loggedIn.getUserType() == 1) { // TA
-            button.setText("Request to become TA");
-            button.setOnClickListener(view -> {
-
-            });
+            TA ta = db.TADao().getRelation(course.getId(), loggedIn.getId());
+            if (ta == null) {
+                button.setText("Request to become TA");
+                button.setOnClickListener(view -> {
+                    db.TADao().insert(new TA(loggedIn.getId(), course.getId(), true));
+                    Toast.makeText(this, "Success!", Toast.LENGTH_SHORT).show();
+                    button.setText("Add homework");
+                    button.setOnClickListener(view2 -> {
+                        Intent intent1 = new Intent(this, AddHomeworkActivity.class);
+                        intent1.putExtra("course", course.getId());
+                        startActivity(intent1);
+                    });
+                });
+            } else {
+                button.setText("Add homework");
+                button.setOnClickListener(view -> {
+                    Intent intent1 = new Intent(this, AddHomeworkActivity.class);
+                    intent1.putExtra("course", course.getId());
+                    startActivity(intent1);
+                });
+            }
         }
         if (loggedIn.getUserType() == 2) { // Student
             button.setText("Enroll");
