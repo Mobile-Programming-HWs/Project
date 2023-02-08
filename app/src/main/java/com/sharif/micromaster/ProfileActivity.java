@@ -12,6 +12,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.android.material.navigation.NavigationView;
@@ -32,6 +33,7 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
     NavigationView navigationView;
     ActionBarDrawerToggle toggle;
     Database db;
+    Button logout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +76,11 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
                 courseList.add(course);
             }
         }
+        logout.setOnClickListener(view -> {
+            db.LoggedInUserDao().deleteAll();
+            Intent intent = new Intent(ProfileActivity.this, MainActivity.class);
+            startActivity(intent);
+        });
         adapter = new CustomAdapter(courseList, getApplicationContext());
         recyclerView.setAdapter(adapter);
     }
@@ -85,6 +92,7 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
         recyclerView = findViewById(R.id.profile_courses);
         drawerLayout = findViewById(R.id.profile_drawer);
         navigationView = findViewById(R.id.nav_prof);
+        logout = findViewById(R.id.logout);
     }
 
     @Override

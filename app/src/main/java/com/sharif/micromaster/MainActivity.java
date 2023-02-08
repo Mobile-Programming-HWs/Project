@@ -22,6 +22,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         findViews();
         db = Database.getInstance(this);
+        LoggedInUser logged = db.LoggedInUserDao().user();
+        if (logged != null) {
+            Intent intent = new Intent(this, CoursesListActivity.class);
+            startActivity(intent);
+        }
         login.setOnClickListener(view -> {
             boolean isValid = true;
             if (emailView.getText().toString().isEmpty()) {
