@@ -55,11 +55,13 @@ public class CourseActivity extends AppCompatActivity {
         if (loggedIn.getUserType() == 1) { // TA
             TA ta = db.TADao().getRelation(course.getId(), loggedIn.getId());
             if (ta == null) {
+                recyclerView.setVisibility(View.INVISIBLE);
                 button.setText("Request to become TA");
                 button.setOnClickListener(view -> {
                     db.TADao().insert(new TA(loggedIn.getId(), course.getId(), true));
                     Toast.makeText(this, "Success!", Toast.LENGTH_SHORT).show();
                     button.setText("Add homework");
+                    recyclerView.setVisibility(View.VISIBLE);
                     button.setOnClickListener(view2 -> {
                         Intent intent1 = new Intent(this, AddHomeworkActivity.class);
                         intent1.putExtra("course", course.getId());
@@ -76,10 +78,19 @@ public class CourseActivity extends AppCompatActivity {
             }
         }
         if (loggedIn.getUserType() == 2) { // Student
-            button.setText("Enroll");
-            button.setOnClickListener(view -> {
-
-            });
+            Enrollment enrollment = db.EnrollmentDao().getUserAndCourse(loggedIn.getId(), course.getId());
+            if (enrollment == null) {
+                button.setText("Enroll");
+                recyclerView.setVisibility(View.INVISIBLE);
+                button.setOnClickListener(view -> {
+                    db.EnrollmentDao().insert(new Enrollment(loggedIn.getId(), course.getId()));
+                    Toast.makeText(this, "Success!", Toast.LENGTH_SHORT).show();
+                    button.setVisibility(View.INVISIBLE);
+                    recyclerView.setVisibility(View.VISIBLE);
+                });
+            } else {
+                button.setVisibility(View.INVISIBLE);
+            }
         }
         name.setText(course.getName());
         teacher.setText(String.valueOf(db.UserDao().getUserById(course.getTeacherID()).getName()));

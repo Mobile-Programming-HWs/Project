@@ -17,6 +17,8 @@ public abstract class Database extends RoomDatabase {
 
     public abstract TADao TADao();
 
+    public abstract EnrollmentDao EnrollmentDao();
+
     private static volatile Database INSTANCE;
 
     static Database getInstance(final Context context) {
