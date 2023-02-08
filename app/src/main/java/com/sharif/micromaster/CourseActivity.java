@@ -70,19 +70,6 @@ public class CourseActivity extends AppCompatActivity {
         homeworkList = db.HomeworkDao().getHomeworksByCourseId(course.getId());
         adapter = new HomeworkAdapter(homeworkList, getApplicationContext());
         recyclerView.setAdapter(adapter);
-        recyclerView.addOnItemTouchListener(
-                new RecyclerItemClickListener(this, recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(View view, int position) {
-
-                    }
-
-                    @Override
-                    public void onLongItemClick(View view, int position) {
-
-                    }
-                })
-        );
     }
 
     private void findViews() {

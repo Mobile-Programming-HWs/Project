@@ -51,7 +51,7 @@ public class CoursesListActivity extends AppCompatActivity implements Navigation
         recycler.setHasFixedSize(true);
         recycler.setLayoutManager(new LinearLayoutManager(this));
 
-        adapter = new CustomAdapter(courseList, getApplicationContext());
+        adapter = new CustomAdapter(courseList, this);
         recycler.setAdapter(adapter);
         recycler.addOnItemTouchListener(
                 new RecyclerItemClickListener(this, recycler, new RecyclerItemClickListener.OnItemClickListener() {

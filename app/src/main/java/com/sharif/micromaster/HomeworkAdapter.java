@@ -1,8 +1,14 @@
 package com.sharif.micromaster;
 
+import static android.content.Context.DOWNLOAD_SERVICE;
+
+
+
+import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-public class HomeworkAdapter extends RecyclerView.Adapter<HomeworkAdapter.MyViewHolder>{
+public class HomeworkAdapter extends RecyclerView.Adapter<HomeworkAdapter.MyViewHolder> {
 
 
     List<Homework> homeworkList;
@@ -45,10 +51,12 @@ public class HomeworkAdapter extends RecyclerView.Adapter<HomeworkAdapter.MyView
         holder.button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse(homework.getPdfLink()));
-                Log.d("aaaaaa", homework.getPdfLink());
-                context.startActivity(intent);
+                DownloadManager.Request r = new DownloadManager.Request(Uri.parse(homework.getPdfLink()));
+                r.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "homeworks");
+                r.allowScanningByMediaScanner();
+                r.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+                DownloadManager dm = (DownloadManager) context.getSystemService(DOWNLOAD_SERVICE);
+                dm.enqueue(r);
             }
         });
     }
@@ -58,14 +66,15 @@ public class HomeworkAdapter extends RecyclerView.Adapter<HomeworkAdapter.MyView
         return homeworkList.size();
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder{
-    TextView description, creator;
-    Button button;
-    public MyViewHolder(@NonNull View itemView) {
-        super(itemView);
-        description = itemView.findViewById(R.id.hw_description);
-        creator = itemView.findViewById(R.id.hw_name);
-        button = itemView.findViewById(R.id.hw_download);
+    class MyViewHolder extends RecyclerView.ViewHolder {
+        TextView description, creator;
+        Button button;
+
+        public MyViewHolder(@NonNull View itemView) {
+            super(itemView);
+            description = itemView.findViewById(R.id.hw_description);
+            creator = itemView.findViewById(R.id.hw_name);
+            button = itemView.findViewById(R.id.hw_download);
+        }
     }
-}
 }
