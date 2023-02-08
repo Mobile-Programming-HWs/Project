@@ -39,11 +39,29 @@ public class CourseActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         User loggedIn = db.UserDao().getUserById(db.LoggedInUserDao().user().getUserID());
+        if (loggedIn.getUserType() == 0) { // Teacher
+            if (course.getTeacherID() == loggedIn.getId()) {
+                button.setText("Add homework");
+                button.setOnClickListener(view -> {
+                    Intent intent1 = new Intent(this, AddHomeworkActivity.class);
+                    intent1.putExtra("course", course.getId());
+                    startActivity(intent1);
+                });
+            } else {
+                button.setVisibility(View.INVISIBLE);
+            }
+        }
         if (loggedIn.getUserType() == 1) { // TA
             button.setText("Request to become TA");
+            button.setOnClickListener(view -> {
+
+            });
         }
         if (loggedIn.getUserType() == 2) { // Student
             button.setText("Enroll");
+            button.setOnClickListener(view -> {
+
+            });
         }
         name.setText(course.getName());
         teacher.setText(String.valueOf(db.UserDao().getUserById(course.getTeacherID()).getName()));

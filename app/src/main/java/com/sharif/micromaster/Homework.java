@@ -14,14 +14,14 @@ public class Homework {
     private int courseID;
 
     @NonNull
-    private String creator;
+    private int creator;
 
     @NonNull
     private String pdfLink;
 
     private String description;
 
-    public Homework(int id, int courseID, @NonNull String creator, String description, @NonNull String pdfLink) {
+    public Homework(int courseID, int creator, String description, @NonNull String pdfLink) {
         this.id = id;
         this.courseID = courseID;
         this.creator = creator;
@@ -29,12 +29,11 @@ public class Homework {
         this.pdfLink = pdfLink;
     }
 
-    @NonNull
-    public String getCreator() {
+    public int getCreator() {
         return creator;
     }
 
-    public void setCreator(@NonNull String creator) {
+    public void setCreator( int creator) {
         this.creator = creator;
     }
 

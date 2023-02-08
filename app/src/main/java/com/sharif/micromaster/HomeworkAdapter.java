@@ -3,6 +3,7 @@ package com.sharif.micromaster;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,10 +22,12 @@ public class HomeworkAdapter extends RecyclerView.Adapter<HomeworkAdapter.MyView
 
     List<Homework> homeworkList;
     Context context;
+    Database db;
 
     public HomeworkAdapter(List<Homework> homeworkList, Context context) {
         this.homeworkList = homeworkList;
         this.context = context;
+        db = Database.getInstance(context);
     }
 
     @NonNull
@@ -38,12 +41,13 @@ public class HomeworkAdapter extends RecyclerView.Adapter<HomeworkAdapter.MyView
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         final Homework homework = homeworkList.get(position);
         holder.description.setText(homework.getDescription());
-        holder.creator.setText(homework.getCreator());
+        holder.creator.setText(db.UserDao().getUserById(homework.getCreator()).getName());
         holder.button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Intent.ACTION_VIEW);
                 intent.setData(Uri.parse(homework.getPdfLink()));
+                Log.d("aaaaaa", homework.getPdfLink());
                 context.startActivity(intent);
             }
         });
