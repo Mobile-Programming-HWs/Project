@@ -1,5 +1,6 @@
 package com.sharif.micromaster;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -43,10 +44,13 @@ public class CourseActivity extends AppCompatActivity {
         if (loggedIn.getUserType() == 0) { // Teacher
             if (course.getTeacherID() == loggedIn.getId()) {
                 button.setText("Add homework");
-                button.setOnClickListener(view -> {
-                    Intent intent1 = new Intent(this, AddHomeworkActivity.class);
-                    intent1.putExtra("course", course.getId());
-                    startActivity(intent1);
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent1 = new Intent(CourseActivity.this, AddHomeworkActivity.class);
+                        intent1.putExtra("course", course.getId());
+                        startActivityForResult(intent1, 100);
+                    }
                 });
             } else {
                 button.setVisibility(View.INVISIBLE);
@@ -63,9 +67,9 @@ public class CourseActivity extends AppCompatActivity {
                     button.setText("Add homework");
                     recyclerView.setVisibility(View.VISIBLE);
                     button.setOnClickListener(view2 -> {
-                        Intent intent1 = new Intent(this, AddHomeworkActivity.class);
+                        Intent intent1 = new Intent(CourseActivity.this, AddHomeworkActivity.class);
                         intent1.putExtra("course", course.getId());
-                        startActivity(intent1);
+                        startActivityForResult(intent1, 100);
                     });
                 });
             } else {
@@ -73,7 +77,7 @@ public class CourseActivity extends AppCompatActivity {
                 button.setOnClickListener(view -> {
                     Intent intent1 = new Intent(this, AddHomeworkActivity.class);
                     intent1.putExtra("course", course.getId());
-                    startActivity(intent1);
+                    startActivityForResult(intent1, 100);
                 });
             }
         }
@@ -99,6 +103,18 @@ public class CourseActivity extends AppCompatActivity {
         homeworkList = db.HomeworkDao().getHomeworksByCourseId(course.getId());
         adapter = new HomeworkAdapter(homeworkList, getApplicationContext());
         recyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 100) {
+            List<Homework> newList = db.HomeworkDao().getHomeworksByCourseId(course.getId());
+            if (newList.size() != homeworkList.size()) {
+                homeworkList.add(newList.get(newList.size() - 1));
+                adapter.notifyItemInserted(homeworkList.size() - 1);
+            }
+        }
     }
 
     private void findViews() {

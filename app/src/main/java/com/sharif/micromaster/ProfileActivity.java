@@ -39,6 +39,8 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
         setContentView(R.layout.activity_profile);
         db = Database.getInstance(this);
         findViews();
+        navigationView.getMenu().getItem(1).setChecked(true);
+        navigationView.getMenu().getItem(0).setChecked(false);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setCheckedItem(R.id.item2);
         toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
@@ -53,8 +55,22 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         courseList = new ArrayList<>();
-        for (Course course: db.CourseDao().getCourses()) {
-            if (course.getTeacherID() == loggedIn.getId()) {
+        if (loggedIn.getUserType() == 0) {
+            for (Course course : db.CourseDao().getCourses()) {
+                if (course.getTeacherID() == loggedIn.getId()) {
+                    courseList.add(course);
+                }
+            }
+        } else if (loggedIn.getUserType() == 1) {
+            List<TA> taArrayList = db.TADao().getTAByUserId(loggedIn.getId());
+            for (TA ta: taArrayList) {
+                Course course = db.CourseDao().getCourse(ta.getCourseId());
+                courseList.add(course);
+            }
+        } else if (loggedIn.getUserType() == 2) {
+            List<Enrollment> enrollments = db.EnrollmentDao().getUsersCourses(loggedIn.getId());
+            for (Enrollment enrollment: enrollments) {
+                Course course = db.CourseDao().getCourse(enrollment.getCourseId());
                 courseList.add(course);
             }
         }

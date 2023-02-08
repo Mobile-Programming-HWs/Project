@@ -42,6 +42,7 @@ public class AddHomeworkActivity extends AppCompatActivity {
                     link.getText().toString());
             db.HomeworkDao().insert(homework);
             Toast.makeText(this, "Success!", Toast.LENGTH_SHORT).show();
+            setResult(RESULT_OK);
             finish();
         });
     }

@@ -72,7 +72,7 @@ public class CoursesListActivity extends AppCompatActivity implements Navigation
         fab.setOnClickListener(view -> {
             User loggedIn = db.UserDao().getUserById(db.LoggedInUserDao().user().getUserID());
             if (loggedIn.getUserType() == 0) {
-                Intent intent = new Intent(this, AddCourseActivity.class);
+                Intent intent = new Intent(CoursesListActivity.this, AddCourseActivity.class);
                 startActivityForResult(intent, 11);
             } else {
                 Toast.makeText(CoursesListActivity.this, "You have to be a teacher to add a course!", Toast.LENGTH_SHORT).show();
@@ -85,7 +85,7 @@ public class CoursesListActivity extends AppCompatActivity implements Navigation
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK && requestCode == 11) {
+        if (requestCode == 11) {
             List<Course> newCourses = db.CourseDao().getCourses();
             if (newCourses.size() != courseList.size()) {
                 courseList.add(newCourses.get(newCourses.size() - 1));
