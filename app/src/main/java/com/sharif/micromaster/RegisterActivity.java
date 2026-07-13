@@ -46,12 +46,23 @@ public class RegisterActivity extends AppCompatActivity {
         imageView.setImageBitmap(bitmap);
         db = Database.getInstance(this);
         register.setOnClickListener(view -> {
-            if (email.getText().toString().isEmpty()) {
-                Toast.makeText(RegisterActivity.this, "email cannot be empty", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            if (password.getText().toString().isEmpty()) {
-                Toast.makeText(RegisterActivity.this, "password cannot be empty", Toast.LENGTH_SHORT).show();
+            String enteredName = name.getText().toString().trim();
+            String enteredEmail = email.getText().toString().trim();
+            String enteredPassword = password.getText().toString();
+            clearInputErrors();
+            RegistrationValidator.ValidationResult validation =
+                    RegistrationValidator.validate(enteredName, enteredEmail, enteredPassword);
+            if (!validation.isValid()) {
+                if (validation.getNameError() != null) {
+                    name.setError(validation.getNameError());
+                }
+                if (validation.getEmailError() != null) {
+                    email.setError(validation.getEmailError());
+                }
+                if (validation.getPasswordError() != null) {
+                    password.setError(validation.getPasswordError());
+                }
+                Toast.makeText(RegisterActivity.this, validation.getFirstError(), Toast.LENGTH_SHORT).show();
                 return;
             }
             int type = userType.indexOfChild(findViewById(userType.getCheckedRadioButtonId()));
@@ -59,11 +70,11 @@ public class RegisterActivity extends AppCompatActivity {
                 Toast.makeText(RegisterActivity.this, "Choose an account type", Toast.LENGTH_SHORT).show();
                 return;
             }
-            User user = db.UserDao().getUser(email.getText().toString());
+            User user = db.UserDao().getUser(enteredEmail);
             if (user != null) {
                 Toast.makeText(this, "This email is already registered!", Toast.LENGTH_SHORT).show();
             } else {
-                user = new User(email.getText().toString(), password.getText().toString(), name.getText().toString(),
+                user = new User(enteredEmail, enteredPassword, enteredName,
                         type, BitmapHelper.bitmapToString(bitmap));
                 long userId = db.UserDao().insert(user);
                 if (userId == -1) {
@@ -154,6 +165,12 @@ public class RegisterActivity extends AppCompatActivity {
         upload = findViewById(R.id.upload_img);
         register = findViewById(R.id.register_button);
         take = findViewById(R.id.take_img);
+    }
+
+    private void clearInputErrors() {
+        name.setError(null);
+        email.setError(null);
+        password.setError(null);
     }
 
 

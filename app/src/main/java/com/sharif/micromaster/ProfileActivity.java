@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,6 +24,7 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
 
     TextView name;
     TextView email;
+    TextView coursesEmpty;
     RecyclerView recyclerView;
     de.hdodenhof.circleimageview.CircleImageView imageView;
     List<Course> courseList;
@@ -100,16 +102,24 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
         });
         adapter = new CustomAdapter(courseList, getApplicationContext());
         recyclerView.setAdapter(adapter);
+        updateCourseListState();
     }
 
     private void findViews() {
         name = findViewById(R.id.profile_name);
         email = findViewById(R.id.profile_email);
+        coursesEmpty = findViewById(R.id.profile_courses_empty);
         recyclerView = findViewById(R.id.profile_courses);
         imageView = findViewById(R.id.profile_image);
         drawerLayout = findViewById(R.id.profile_drawer);
         navigationView = findViewById(R.id.nav_prof);
         logout = findViewById(R.id.logout);
+    }
+
+    private void updateCourseListState() {
+        boolean hasCourses = courseList != null && !courseList.isEmpty();
+        recyclerView.setVisibility(hasCourses ? View.VISIBLE : View.GONE);
+        coursesEmpty.setVisibility(hasCourses ? View.GONE : View.VISIBLE);
     }
 
     private void goToLogin() {

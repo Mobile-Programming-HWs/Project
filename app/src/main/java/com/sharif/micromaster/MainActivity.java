@@ -32,18 +32,23 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         login.setOnClickListener(view -> {
+            String enteredEmail = emailView.getText().toString().trim();
+            String enteredPassword = passwordView.getText().toString();
             boolean isValid = true;
-            if (emailView.getText().toString().isEmpty()) {
-                emailView.setError("Please enter email");
+            emailView.setError(null);
+            passwordView.setError(null);
+            String emailError = RegistrationValidator.validateEmail(enteredEmail);
+            if (emailError != null) {
+                emailView.setError(emailError);
                 isValid = false;
             }
-            if (passwordView.getText().toString().isEmpty()) {
+            if (enteredPassword.trim().isEmpty()) {
                 passwordView.setError("Please enter password");
                 isValid = false;
             }
             if (!isValid)
                 return;
-            login(emailView.getText().toString(), passwordView.getText().toString());
+            login(enteredEmail, enteredPassword);
 
         });
         register.setOnClickListener(view -> {
@@ -53,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void login(String email, String password) {
-        User user = db.UserDao().getUser(emailView.getText().toString());
+        User user = db.UserDao().getUser(email);
         if (user == null) {
             Toast.makeText(MainActivity.this, "Entered email does not exist!", Toast.LENGTH_SHORT).show();
             return;

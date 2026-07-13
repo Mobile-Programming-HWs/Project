@@ -4,7 +4,7 @@ Android course management app for the final Mobile Programming project.
 
 ## What It Does
 
-- Registers local users as teachers, TAs, or students.
+- Registers local users as teachers, TAs, or students with basic name, email, and password validation.
 - Lets teachers create courses and add homework links.
 - Lets students enroll in courses.
 - Lets TAs request course access. Only approved TAs can add homework.

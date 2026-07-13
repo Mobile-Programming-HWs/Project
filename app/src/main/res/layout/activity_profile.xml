@@ -46,16 +46,34 @@
         android:layout_toEndOf="@+id/profile_image"
         android:text="TextView" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/profile_courses"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="1dp"
-        android:layout_marginTop="173dp"
-        android:layout_marginEnd="0dp" />
+        <FrameLayout
+            android:id="@+id/profile_courses_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="1dp"
+            android:layout_marginTop="173dp"
+            android:layout_marginEnd="0dp">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/profile_courses"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <TextView
+                android:id="@+id/profile_courses_empty"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:padding="24dp"
+                android:text="@string/empty_profile_courses"
+                android:textSize="16sp"
+                android:visibility="gone" />
+
+        </FrameLayout>
 
         <Button
             android:id="@+id/logout"

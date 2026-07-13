@@ -10,9 +10,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -23,6 +23,7 @@ import java.util.List;
 public class CoursesListActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     RecyclerView recycler;
+    TextView coursesEmpty;
     List<Course> courseList;
     RecyclerView.Adapter adapter;
     FloatingActionButton fab;
@@ -48,11 +49,13 @@ public class CoursesListActivity extends AppCompatActivity implements Navigation
         toggle.syncState();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         recycler = findViewById(R.id.recyclerView);
+        coursesEmpty = findViewById(R.id.courses_empty);
         recycler.setHasFixedSize(true);
         recycler.setLayoutManager(new LinearLayoutManager(this));
 
         adapter = new CustomAdapter(courseList, this);
         recycler.setAdapter(adapter);
+        updateCourseListState();
         recycler.addOnItemTouchListener(
                 new RecyclerItemClickListener(this, recycler, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
@@ -90,8 +93,15 @@ public class CoursesListActivity extends AppCompatActivity implements Navigation
             if (newCourses.size() != courseList.size()) {
                 courseList.add(newCourses.get(newCourses.size() - 1));
                 adapter.notifyItemInserted(newCourses.size() - 1);
+                updateCourseListState();
             }
         }
+    }
+
+    private void updateCourseListState() {
+        boolean hasCourses = courseList != null && !courseList.isEmpty();
+        recycler.setVisibility(hasCourses ? View.VISIBLE : View.GONE);
+        coursesEmpty.setVisibility(hasCourses ? View.GONE : View.VISIBLE);
     }
 
     @Override

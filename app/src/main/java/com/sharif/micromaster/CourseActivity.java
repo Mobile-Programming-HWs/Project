@@ -20,12 +20,14 @@ public class CourseActivity extends AppCompatActivity {
     TextView units;
     TextView teacher;
     TextView description;
+    TextView homeworkEmpty;
     Button button;
     Course course;
     Database db;
     RecyclerView recyclerView;
     List<Homework> homeworkList;
     RecyclerView.Adapter adapter;
+    boolean canViewHomeworks = true;
 
 
     @Override
@@ -61,7 +63,8 @@ public class CourseActivity extends AppCompatActivity {
         if (loggedIn.getUserType() == 1) { // TA
             TA ta = db.TADao().getRelation(course.getId(), loggedIn.getId());
             if (ta == null) {
-                recyclerView.setVisibility(View.INVISIBLE);
+                canViewHomeworks = false;
+                showHomeworkMessage(R.string.empty_homeworks_ta_request);
                 button.setText("Request to become TA");
                 button.setOnClickListener(view -> {
                     long taId = db.TADao().insert(new TA(loggedIn.getId(), course.getId(), false));
@@ -75,14 +78,16 @@ public class CourseActivity extends AppCompatActivity {
             } else if (ta.isApproved()) {
                 configureAddHomeworkButton();
             } else {
+                canViewHomeworks = false;
                 showPendingTARequest();
             }
         }
         if (loggedIn.getUserType() == 2) { // Student
             Enrollment enrollment = db.EnrollmentDao().getUserAndCourse(loggedIn.getId(), course.getId());
             if (enrollment == null) {
+                canViewHomeworks = false;
                 button.setText("Enroll");
-                recyclerView.setVisibility(View.INVISIBLE);
+                showHomeworkMessage(R.string.empty_homeworks_enroll);
                 button.setOnClickListener(view -> {
                     long enrollmentId = db.EnrollmentDao().insert(new Enrollment(loggedIn.getId(), course.getId()));
                     if (enrollmentId == -1) {
@@ -90,8 +95,9 @@ public class CourseActivity extends AppCompatActivity {
                     } else {
                         Toast.makeText(this, "Success!", Toast.LENGTH_SHORT).show();
                     }
+                    canViewHomeworks = true;
                     button.setVisibility(View.INVISIBLE);
-                    recyclerView.setVisibility(View.VISIBLE);
+                    updateHomeworkState();
                 });
             } else {
                 button.setVisibility(View.INVISIBLE);
@@ -104,6 +110,7 @@ public class CourseActivity extends AppCompatActivity {
         homeworkList = db.HomeworkDao().getHomeworksByCourseId(course.getId());
         adapter = new HomeworkAdapter(homeworkList, getApplicationContext());
         recyclerView.setAdapter(adapter);
+        updateHomeworkState();
     }
 
     @Override
@@ -112,8 +119,10 @@ public class CourseActivity extends AppCompatActivity {
         if (requestCode == 100) {
             List<Homework> newList = db.HomeworkDao().getHomeworksByCourseId(course.getId());
             if (newList.size() != homeworkList.size()) {
-                homeworkList.add(newList.get(newList.size() - 1));
-                adapter.notifyItemInserted(homeworkList.size() - 1);
+                homeworkList.clear();
+                homeworkList.addAll(newList);
+                adapter.notifyDataSetChanged();
+                updateHomeworkState();
             }
         }
     }
@@ -123,6 +132,7 @@ public class CourseActivity extends AppCompatActivity {
         units = findViewById(R.id.course_units);
         teacher = findViewById(R.id.course_teacher);
         description = findViewById(R.id.course_description);
+        homeworkEmpty = findViewById(R.id.course_homeworks_empty);
         button = findViewById(R.id.enroll);
         recyclerView = findViewById(R.id.course_homeworks);
     }
@@ -138,9 +148,25 @@ public class CourseActivity extends AppCompatActivity {
     }
 
     private void showPendingTARequest() {
-        recyclerView.setVisibility(View.INVISIBLE);
+        showHomeworkMessage(R.string.empty_homeworks_ta_pending);
         button.setText("Request pending");
         button.setEnabled(false);
+    }
+
+    private void updateHomeworkState() {
+        if (!canViewHomeworks) {
+            return;
+        }
+        boolean hasHomeworks = homeworkList != null && !homeworkList.isEmpty();
+        recyclerView.setVisibility(hasHomeworks ? View.VISIBLE : View.GONE);
+        homeworkEmpty.setText(R.string.empty_homeworks);
+        homeworkEmpty.setVisibility(hasHomeworks ? View.GONE : View.VISIBLE);
+    }
+
+    private void showHomeworkMessage(int messageResId) {
+        recyclerView.setVisibility(View.GONE);
+        homeworkEmpty.setText(messageResId);
+        homeworkEmpty.setVisibility(View.VISIBLE);
     }
 
     private String getTeacherName(int teacherId) {

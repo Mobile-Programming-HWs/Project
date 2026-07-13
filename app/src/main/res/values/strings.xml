@@ -13,6 +13,12 @@
     <string name="register">register</string>
     <string name="open">open</string>
     <string name="close">close</string>
+    <string name="empty_courses">No courses have been added yet.</string>
+    <string name="empty_homeworks">No homework has been added yet.</string>
+    <string name="empty_homeworks_enroll">Enroll to see homework for this course.</string>
+    <string name="empty_homeworks_ta_request">Request TA access to see homework for this course.</string>
+    <string name="empty_homeworks_ta_pending">Your TA request is pending.</string>
+    <string name="empty_profile_courses">No related courses yet.</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_register">RegisterActivity</string>
