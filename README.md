@@ -10,9 +10,19 @@ Android course management app for the final Mobile Programming project.
 - Lets TAs request course access. Only approved TAs can add homework.
 - Shows user role, course counts, related courses, homework counts, and homework file status.
 
-## Screenshot
+## Screenshots
 
-![Login screen](docs/screenshots/login.png)
+<p>
+  <img src="docs/screenshots/login.png" width="160" alt="Login screen">
+  <img src="docs/screenshots/register.png" width="160" alt="Register screen">
+  <img src="docs/screenshots/courses-empty.png" width="160" alt="Empty course list">
+  <img src="docs/screenshots/add-course.png" width="160" alt="Add course screen">
+  <img src="docs/screenshots/courses.png" width="160" alt="Course list">
+  <img src="docs/screenshots/course-detail.png" width="160" alt="Course detail">
+  <img src="docs/screenshots/add-homework.png" width="160" alt="Add homework screen">
+  <img src="docs/screenshots/drawer.png" width="160" alt="Navigation drawer">
+  <img src="docs/screenshots/profile.png" width="160" alt="Profile screen">
+</p>
 
 ## Setup
 
@@ -51,5 +61,7 @@ adb devices
 - Course details and homework: `CourseActivity`, `AddHomeworkActivity`
 - Profile screen: `ProfileActivity`
 - Local database: Room entities and DAOs under `com.sharif.micromaster`
+- Profile images fall back to the app icon when no photo is saved.
+- The app includes light and night colors for the main screens.
 
 The app stores users, courses, enrollments, TA records, homework links, and login state in Room. Homework links can point to online files and are downloaded through Android DownloadManager.

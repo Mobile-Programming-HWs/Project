@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -65,7 +66,10 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
             return;
         }
         if (loggedIn.getImage() != null && !loggedIn.getImage().isEmpty()) {
-            imageView.setImageBitmap(BitmapHelper.stringToBitmap(loggedIn.getImage()));
+            Bitmap profileBitmap = BitmapHelper.stringToBitmap(loggedIn.getImage());
+            if (profileBitmap != null) {
+                imageView.setImageBitmap(profileBitmap);
+            }
         }
         name.setText(displayText(loggedIn.getName(), "Unknown user"));
         email.setText(displayText(loggedIn.getEmail(), "No email"));
