@@ -8,9 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TextView;
@@ -18,7 +16,6 @@ import android.widget.TextView;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class ProfileActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
@@ -50,8 +47,9 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
         toggle.syncState();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         User loggedIn = db.UserDao().getUserById(db.LoggedInUserDao().user().getUserID());
-        Log.d("aaaaaa", String.valueOf(BitmapHelper.stringToBitmap(loggedIn.getImage())));
-        //imageView.setImageBitmap(BitmapHelper.stringToBitmap(loggedIn.getImage()));
+        if (loggedIn.getImage() != null && !loggedIn.getImage().isEmpty()) {
+            imageView.setImageBitmap(BitmapHelper.stringToBitmap(loggedIn.getImage()));
+        }
         name.setText(loggedIn.getName());
         email.setText(loggedIn.getEmail());
         recyclerView.setHasFixedSize(true);
@@ -89,7 +87,7 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
         name = findViewById(R.id.profile_name);
         email = findViewById(R.id.profile_email);
         recyclerView = findViewById(R.id.profile_courses);
-        recyclerView = findViewById(R.id.profile_courses);
+        imageView = findViewById(R.id.profile_image);
         drawerLayout = findViewById(R.id.profile_drawer);
         navigationView = findViewById(R.id.nav_prof);
         logout = findViewById(R.id.logout);
