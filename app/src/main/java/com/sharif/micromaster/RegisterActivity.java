@@ -106,8 +106,16 @@ public class RegisterActivity extends AppCompatActivity {
             }
         }
         if (requestCode == 2 && resultCode == Activity.RESULT_OK) {
-            Bitmap photo = (Bitmap) data.getExtras().get("data");
-            imageView.setImageBitmap(photo);
+            Bitmap photo = null;
+            if (data != null && data.getExtras() != null) {
+                photo = (Bitmap) data.getExtras().get("data");
+            }
+            if (photo == null) {
+                Toast.makeText(RegisterActivity.this, "image cannot be empty", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            bitmap = photo;
+            imageView.setImageBitmap(bitmap);
         }
     }
 
