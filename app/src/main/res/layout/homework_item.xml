@@ -3,58 +3,55 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cardView"
     android:layout_width="match_parent"
-    android:layout_height="170dp"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="12dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginEnd="12dp"
+    android:layout_marginBottom="8dp"
     app:cardBackgroundColor="@android:color/white"
     app:cardCornerRadius="8dp"
-    app:cardElevation="5dp"
+    app:cardElevation="4dp"
     app:cardPreventCornerOverlap="true"
     app:cardUseCompatPadding="true"
-    app:contentPadding="10dp"
-    app:contentPaddingBottom="10dp">
+    app:contentPadding="12dp">
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/item"
-        android:layout_width="wrap_content"
-        android:layout_height="129dp">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/hw_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="2dp"
+            android:ellipsize="end"
             android:fontFamily="sans-serif"
-            android:gravity="center_vertical"
-            android:maxLines="2"
-            android:text="Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries for previewing layouts and visual mockups."
-            android:textSize="15sp"
-            android:textStyle="italic" />
+            android:maxLines="4"
+            android:text="No description"
+            android:textColor="@android:color/black"
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/hw_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/hw_description"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="6dp"
+            android:ellipsize="end"
             android:fontFamily="sans-serif"
-            android:gravity="center_vertical"
-            android:text="LOREM IPSUM"
-            android:textColor="@android:color/black"
-            android:textSize="17sp" />
+            android:maxLines="1"
+            android:text="Unknown creator"
+            android:textSize="14sp" />
 
         <Button
             android:id="@+id/hw_download"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="130dp"
-            android:layout_marginBottom="13dp"
+            android:layout_gravity="end"
+            android:layout_marginTop="10dp"
+            android:minWidth="112dp"
             android:text="Download" />
 
-
-    </RelativeLayout>
+    </LinearLayout>
 
 </androidx.cardview.widget.CardView>

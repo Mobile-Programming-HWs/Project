@@ -19,19 +19,20 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.Collections;
 import java.util.List;
 
 public class HomeworkAdapter extends RecyclerView.Adapter<HomeworkAdapter.MyViewHolder> {
 
 
-    List<Homework> homeworkList;
-    Context context;
-    Database db;
+    private final List<Homework> homeworkList;
+    private final Context context;
+    private final Database db;
 
     public HomeworkAdapter(List<Homework> homeworkList, Context context) {
-        this.homeworkList = homeworkList;
+        this.homeworkList = homeworkList == null ? Collections.emptyList() : homeworkList;
         this.context = context;
-        db = Database.getInstance(context);
+        db = context == null ? null : Database.getInstance(context);
     }
 
     @NonNull
@@ -44,13 +45,15 @@ public class HomeworkAdapter extends RecyclerView.Adapter<HomeworkAdapter.MyView
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         final Homework homework = homeworkList.get(position);
-        holder.description.setText(homework.getDescription());
-        User creator = db.UserDao().getUserById(homework.getCreator());
-        if (creator == null) {
-            holder.creator.setText("Unknown creator");
-        } else {
-            holder.creator.setText(creator.getName());
+        if (homework == null) {
+            bindMissingHomework(holder);
+            return;
         }
+        holder.description.setText(displayText(homework.getDescription(), "No description"));
+        holder.creator.setText(findCreatorName(homework));
+        boolean canDownload = isValidDownloadLink(homework.getPdfLink());
+        holder.button.setEnabled(canDownload);
+        holder.button.setText(canDownload ? "Download" : "No file");
         holder.button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -60,15 +63,18 @@ public class HomeworkAdapter extends RecyclerView.Adapter<HomeworkAdapter.MyView
     }
 
     private void startDownload(String pdfLink) {
-        Uri uri = Uri.parse(pdfLink);
-        String scheme = uri.getScheme();
-        if (uri.getHost() == null || !("http".equalsIgnoreCase(scheme) || "https".equalsIgnoreCase(scheme))) {
+        if (context == null) {
+            return;
+        }
+        if (!isValidDownloadLink(pdfLink)) {
             Toast.makeText(context, "Homework link is not valid", Toast.LENGTH_SHORT).show();
             return;
         }
+        String trimmedLink = pdfLink.trim();
+        Uri uri = Uri.parse(trimmedLink);
         try {
             DownloadManager.Request request = new DownloadManager.Request(uri);
-            String fileName = URLUtil.guessFileName(pdfLink, null, null);
+            String fileName = URLUtil.guessFileName(trimmedLink, null, null);
             request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName);
             request.allowScanningByMediaScanner();
             request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
@@ -86,6 +92,45 @@ public class HomeworkAdapter extends RecyclerView.Adapter<HomeworkAdapter.MyView
     @Override
     public int getItemCount() {
         return homeworkList.size();
+    }
+
+    private void bindMissingHomework(MyViewHolder holder) {
+        holder.description.setText("No description");
+        holder.creator.setText("Unknown creator");
+        holder.button.setText("No file");
+        holder.button.setEnabled(false);
+        holder.button.setOnClickListener(null);
+    }
+
+    private String findCreatorName(Homework homework) {
+        if (db == null) {
+            return "Unknown creator";
+        }
+        User creator = db.UserDao().getUserById(homework.getCreator());
+        if (creator == null) {
+            return "Unknown creator";
+        }
+        return displayText(creator.getName(), "Unknown creator");
+    }
+
+    private boolean isValidDownloadLink(String pdfLink) {
+        if (pdfLink == null) {
+            return false;
+        }
+        String trimmedLink = pdfLink.trim();
+        if (trimmedLink.isEmpty() || !URLUtil.isNetworkUrl(trimmedLink)) {
+            return false;
+        }
+        Uri uri = Uri.parse(trimmedLink);
+        String scheme = uri.getScheme();
+        return uri.getHost() != null && ("http".equalsIgnoreCase(scheme) || "https".equalsIgnoreCase(scheme));
+    }
+
+    private String displayText(String value, String fallback) {
+        if (value == null || value.trim().isEmpty()) {
+            return fallback;
+        }
+        return value.trim();
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
