@@ -10,6 +10,10 @@ Android course management app for the final Mobile Programming project.
 - Lets TAs request course access. Only approved TAs can add homework.
 - Shows user role, course counts, related courses, homework counts, and homework file status.
 
+## Screenshot
+
+![Login screen](docs/screenshots/login.png)
+
 ## Setup
 
 Install:
