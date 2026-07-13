@@ -2,9 +2,10 @@ package com.sharif.micromaster;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "ta")
+@Entity(tableName = "ta", indices = {@Index(value = {"userId", "courseId"}, unique = true)})
 public class TA {
     @PrimaryKey(autoGenerate = true)
     @NonNull

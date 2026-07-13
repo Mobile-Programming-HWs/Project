@@ -64,8 +64,12 @@ public class CourseActivity extends AppCompatActivity {
                 recyclerView.setVisibility(View.INVISIBLE);
                 button.setText("Request to become TA");
                 button.setOnClickListener(view -> {
-                    db.TADao().insert(new TA(loggedIn.getId(), course.getId(), false));
-                    Toast.makeText(this, "Request sent", Toast.LENGTH_SHORT).show();
+                    long taId = db.TADao().insert(new TA(loggedIn.getId(), course.getId(), false));
+                    if (taId == -1) {
+                        Toast.makeText(this, "Request already exists", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(this, "Request sent", Toast.LENGTH_SHORT).show();
+                    }
                     showPendingTARequest();
                 });
             } else if (ta.isApproved()) {
@@ -80,8 +84,12 @@ public class CourseActivity extends AppCompatActivity {
                 button.setText("Enroll");
                 recyclerView.setVisibility(View.INVISIBLE);
                 button.setOnClickListener(view -> {
-                    db.EnrollmentDao().insert(new Enrollment(loggedIn.getId(), course.getId()));
-                    Toast.makeText(this, "Success!", Toast.LENGTH_SHORT).show();
+                    long enrollmentId = db.EnrollmentDao().insert(new Enrollment(loggedIn.getId(), course.getId()));
+                    if (enrollmentId == -1) {
+                        Toast.makeText(this, "Already enrolled", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(this, "Success!", Toast.LENGTH_SHORT).show();
+                    }
                     button.setVisibility(View.INVISIBLE);
                     recyclerView.setVisibility(View.VISIBLE);
                 });

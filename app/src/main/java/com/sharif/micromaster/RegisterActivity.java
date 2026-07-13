@@ -67,7 +67,11 @@ public class RegisterActivity extends AppCompatActivity {
             } else {
                 user = new User(email.getText().toString(), password.getText().toString(), name.getText().toString(),
                         type, BitmapHelper.bitmapToString(bitmap));
-                db.UserDao().insert(user);
+                long userId = db.UserDao().insert(user);
+                if (userId == -1) {
+                    Toast.makeText(this, "This email is already registered!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 Toast.makeText(RegisterActivity.this, "Success!", Toast.LENGTH_SHORT).show();
                 finish();
             }
