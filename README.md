@@ -7,7 +7,7 @@ Android course management app for the final Mobile Programming project.
 - Registers local users as teachers, TAs, or students.
 - Lets teachers create courses and add homework links.
 - Lets students enroll in courses.
-- Lets TAs request course access and add homework after access is saved.
+- Lets TAs request course access. Only approved TAs can add homework.
 - Shows user profile details and related courses.
 
 ## Setup
@@ -48,4 +48,4 @@ adb devices
 - Profile screen: `ProfileActivity`
 - Local database: Room entities and DAOs under `com.sharif.micromaster`
 
-The app is local-only. It stores users, courses, enrollments, TA records, homework links, and login state in Room.
+The app stores users, courses, enrollments, TA records, homework links, and login state in Room. Homework links can point to online files and are downloaded through Android DownloadManager.

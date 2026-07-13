@@ -64,8 +64,13 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
         } else if (loggedIn.getUserType() == 1) {
             List<TA> taArrayList = db.TADao().getTAByUserId(loggedIn.getId());
             for (TA ta: taArrayList) {
+                if (!ta.isApproved()) {
+                    continue;
+                }
                 Course course = db.CourseDao().getCourse(ta.getCourseId());
-                courseList.add(course);
+                if (course != null) {
+                    courseList.add(course);
+                }
             }
         } else if (loggedIn.getUserType() == 2) {
             List<Enrollment> enrollments = db.EnrollmentDao().getUsersCourses(loggedIn.getId());

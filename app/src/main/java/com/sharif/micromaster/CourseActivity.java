@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -38,20 +37,23 @@ public class CourseActivity extends AppCompatActivity {
         int id = intent.getIntExtra("id", -1);
         course = db.CourseDao().getCourse(id);
         findViews();
+        LoggedInUser session = db.LoggedInUserDao().user();
+        if (course == null || session == null) {
+            Toast.makeText(this, "Course not found", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        User loggedIn = db.UserDao().getUserById(db.LoggedInUserDao().user().getUserID());
+        User loggedIn = db.UserDao().getUserById(session.getUserID());
+        if (loggedIn == null) {
+            Toast.makeText(this, "User not found", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
         if (loggedIn.getUserType() == 0) { // Teacher
             if (course.getTeacherID() == loggedIn.getId()) {
-                button.setText("Add homework");
-                button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent intent1 = new Intent(CourseActivity.this, AddHomeworkActivity.class);
-                        intent1.putExtra("course", course.getId());
-                        startActivityForResult(intent1, 100);
-                    }
-                });
+                configureAddHomeworkButton();
             } else {
                 button.setVisibility(View.INVISIBLE);
             }
@@ -62,23 +64,14 @@ public class CourseActivity extends AppCompatActivity {
                 recyclerView.setVisibility(View.INVISIBLE);
                 button.setText("Request to become TA");
                 button.setOnClickListener(view -> {
-                    db.TADao().insert(new TA(loggedIn.getId(), course.getId(), true));
-                    Toast.makeText(this, "Success!", Toast.LENGTH_SHORT).show();
-                    button.setText("Add homework");
-                    recyclerView.setVisibility(View.VISIBLE);
-                    button.setOnClickListener(view2 -> {
-                        Intent intent1 = new Intent(CourseActivity.this, AddHomeworkActivity.class);
-                        intent1.putExtra("course", course.getId());
-                        startActivityForResult(intent1, 100);
-                    });
+                    db.TADao().insert(new TA(loggedIn.getId(), course.getId(), false));
+                    Toast.makeText(this, "Request sent", Toast.LENGTH_SHORT).show();
+                    showPendingTARequest();
                 });
+            } else if (ta.isApproved()) {
+                configureAddHomeworkButton();
             } else {
-                button.setText("Add homework");
-                button.setOnClickListener(view -> {
-                    Intent intent1 = new Intent(this, AddHomeworkActivity.class);
-                    intent1.putExtra("course", course.getId());
-                    startActivityForResult(intent1, 100);
-                });
+                showPendingTARequest();
             }
         }
         if (loggedIn.getUserType() == 2) { // Student
@@ -124,5 +117,21 @@ public class CourseActivity extends AppCompatActivity {
         description = findViewById(R.id.course_description);
         button = findViewById(R.id.enroll);
         recyclerView = findViewById(R.id.course_homeworks);
+    }
+
+    private void configureAddHomeworkButton() {
+        button.setText("Add homework");
+        button.setEnabled(true);
+        button.setOnClickListener(view -> {
+            Intent intent = new Intent(CourseActivity.this, AddHomeworkActivity.class);
+            intent.putExtra("course", course.getId());
+            startActivityForResult(intent, 100);
+        });
+    }
+
+    private void showPendingTARequest() {
+        recyclerView.setVisibility(View.INVISIBLE);
+        button.setText("Request pending");
+        button.setEnabled(false);
     }
 }
