@@ -97,10 +97,10 @@ public class CourseActivity extends AppCompatActivity {
                 button.setVisibility(View.INVISIBLE);
             }
         }
-        name.setText(course.getName());
-        teacher.setText(String.valueOf(db.UserDao().getUserById(course.getTeacherID()).getName()));
-        units.setText(String.valueOf(course.getUnits()));
-        description.setText(course.getDescription());
+        name.setText(displayText(course.getName(), "Untitled course"));
+        teacher.setText(getTeacherName(course.getTeacherID()));
+        units.setText(course.getUnits() + " units");
+        description.setText(displayText(course.getDescription(), "No description"));
         homeworkList = db.HomeworkDao().getHomeworksByCourseId(course.getId());
         adapter = new HomeworkAdapter(homeworkList, getApplicationContext());
         recyclerView.setAdapter(adapter);
@@ -141,5 +141,20 @@ public class CourseActivity extends AppCompatActivity {
         recyclerView.setVisibility(View.INVISIBLE);
         button.setText("Request pending");
         button.setEnabled(false);
+    }
+
+    private String getTeacherName(int teacherId) {
+        User courseTeacher = db.UserDao().getUserById(teacherId);
+        if (courseTeacher == null) {
+            return "Unknown lecturer";
+        }
+        return displayText(courseTeacher.getName(), "Unknown lecturer");
+    }
+
+    private String displayText(String value, String fallback) {
+        if (value == null || value.trim().isEmpty()) {
+            return fallback;
+        }
+        return value.trim();
     }
 }

@@ -10,23 +10,17 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -61,6 +55,10 @@ public class RegisterActivity extends AppCompatActivity {
                 return;
             }
             int type = userType.indexOfChild(findViewById(userType.getCheckedRadioButtonId()));
+            if (type == -1) {
+                Toast.makeText(RegisterActivity.this, "Choose an account type", Toast.LENGTH_SHORT).show();
+                return;
+            }
             User user = db.UserDao().getUser(email.getText().toString());
             if (user != null) {
                 Toast.makeText(this, "This email is already registered!", Toast.LENGTH_SHORT).show();
@@ -97,16 +95,21 @@ public class RegisterActivity extends AppCompatActivity {
 
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
-            if (data == null) {
+            if (data == null || data.getData() == null) {
                 Toast.makeText(RegisterActivity.this, "image cannot be empty", Toast.LENGTH_SHORT).show();
                 return;
             }
             Uri imageData = data.getData();
-            imageView.setImageURI(imageData);
             try {
-                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageData);
+                Bitmap selectedBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageData);
+                if (selectedBitmap == null) {
+                    Toast.makeText(RegisterActivity.this, "image cannot be opened", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                bitmap = selectedBitmap;
+                imageView.setImageBitmap(bitmap);
             } catch (IOException e) {
-                e.printStackTrace();
+                Toast.makeText(RegisterActivity.this, "image cannot be opened", Toast.LENGTH_SHORT).show();
             }
         }
         if (requestCode == 2 && resultCode == Activity.RESULT_OK) {
@@ -129,7 +132,7 @@ public class RegisterActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 100)
         {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
             {
                 Toast.makeText(this, "camera permission granted", Toast.LENGTH_LONG).show();
                 Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
