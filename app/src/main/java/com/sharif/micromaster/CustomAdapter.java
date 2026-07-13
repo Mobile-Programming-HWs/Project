@@ -42,8 +42,13 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
 
         holder.name.setText(displayText(course.getName(), "Untitled course"));
         holder.description.setText(displayText(course.getDescription(), "No description"));
-        holder.units.setText(course.getUnits() + " units");
-        holder.lecturer.setText(findTeacherName(course));
+        Context context = holder.itemView.getContext();
+        holder.units.setText(context.getString(R.string.units_format, course.getUnits()));
+        holder.lecturer.setText(context.getString(R.string.teacher_format, findTeacherName(course)));
+        holder.homeworkCount.setText(context.getString(
+                R.string.course_homework_count_format,
+                findHomeworkCount(course)
+        ));
         bindImage(holder, course.getImage());
     }
 
@@ -53,10 +58,12 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
     }
 
     private void bindMissingCourse(MyViewHolder holder) {
+        Context context = holder.itemView.getContext();
         holder.name.setText("Untitled course");
         holder.description.setText("No description");
-        holder.lecturer.setText("Unknown lecturer");
-        holder.units.setText("0 units");
+        holder.lecturer.setText(context.getString(R.string.teacher_format, "Unknown lecturer"));
+        holder.units.setText(context.getString(R.string.units_format, 0));
+        holder.homeworkCount.setText(context.getString(R.string.course_homework_count_format, 0));
         holder.imageView.setImageResource(R.drawable.ic_launcher_background);
     }
 
@@ -69,6 +76,14 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
             return "Unknown lecturer";
         }
         return displayText(user.getName(), "Unknown lecturer");
+    }
+
+    private int findHomeworkCount(Course course) {
+        if (db == null || course == null) {
+            return 0;
+        }
+        List<Homework> homeworks = db.HomeworkDao().getHomeworksByCourseId(course.getId());
+        return homeworks == null ? 0 : homeworks.size();
     }
 
     private void bindImage(MyViewHolder holder, String image) {
@@ -97,7 +112,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
 
     class MyViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
-        TextView name, description, lecturer, units;
+        TextView name, description, lecturer, units, homeworkCount;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -106,6 +121,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
             description = itemView.findViewById(R.id.description);
             lecturer = itemView.findViewById(R.id.lecturer);
             units = itemView.findViewById(R.id.units);
+            homeworkCount = itemView.findViewById(R.id.course_homework_count);
         }
     }
 }

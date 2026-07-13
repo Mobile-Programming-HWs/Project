@@ -7,55 +7,101 @@
     android:id="@+id/profile_drawer"
     tools:context=".ProfileActivity">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/profile_image"
-            android:layout_width="85dp"
-            android:layout_height="75dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="58dp"
-            app:civ_border_width="2dp"
-            tools:srcCompat="@tools:sample/avatars" />
-
-        <TextView
-            android:id="@+id/profile_name"
-            android:layout_width="176dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginStart="71dp"
-            android:layout_marginTop="55dp"
-            android:layout_marginEnd="47dp"
-            android:layout_toEndOf="@+id/profile_image"
-            android:minHeight="48dp"
-            android:text="TextView" />
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="20dp"
+            android:paddingTop="20dp"
+            android:paddingEnd="20dp"
+            android:paddingBottom="14dp">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/profile_image"
+                android:layout_width="84dp"
+                android:layout_height="84dp"
+                app:civ_border_color="?attr/colorPrimary"
+                app:civ_border_width="2dp"
+                tools:srcCompat="@tools:sample/avatars" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/profile_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:textColor="?android:attr/textColorPrimary"
+                    android:textSize="21sp"
+                    android:textStyle="bold"
+                    tools:text="Iman Mohammadi" />
+
+                <TextView
+                    android:id="@+id/profile_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    tools:text="student@example.com" />
+
+                <TextView
+                    android:id="@+id/profile_role"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    tools:text="Role: Student" />
+
+                <TextView
+                    android:id="@+id/profile_course_count"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    tools:text="3 related courses" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/logout"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:text="Log out" />
 
         <TextView
-        android:id="@+id/profile_email"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="70dp"
-        android:layout_marginTop="115dp"
-        android:layout_toEndOf="@+id/profile_image"
-        android:text="TextView" />
+            android:id="@+id/profile_courses_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="20dp"
+            android:paddingTop="12dp"
+            android:paddingEnd="20dp"
+            android:paddingBottom="4dp"
+            android:text="@string/profile_courses_title"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
         <FrameLayout
             android:id="@+id/profile_courses_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginStart="1dp"
-            android:layout_marginTop="173dp"
-            android:layout_marginEnd="0dp">
+            android:layout_height="0dp"
+            android:layout_weight="1">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/profile_courses"
@@ -75,18 +121,7 @@
 
         </FrameLayout>
 
-        <Button
-            android:id="@+id/logout"
-            android:layout_width="82dp"
-            android:layout_height="34dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="6dp"
-            android:layout_marginEnd="16dp"
-            android:textSize="8dp"
-            android:text="logout" />
-
-    </RelativeLayout>
+    </LinearLayout>
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_prof"

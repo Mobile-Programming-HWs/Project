@@ -20,6 +20,7 @@ public class CourseActivity extends AppCompatActivity {
     TextView units;
     TextView teacher;
     TextView description;
+    TextView homeworkCount;
     TextView homeworkEmpty;
     Button button;
     Course course;
@@ -104,8 +105,8 @@ public class CourseActivity extends AppCompatActivity {
             }
         }
         name.setText(displayText(course.getName(), "Untitled course"));
-        teacher.setText(getTeacherName(course.getTeacherID()));
-        units.setText(course.getUnits() + " units");
+        teacher.setText(getString(R.string.teacher_format, getTeacherName(course.getTeacherID())));
+        units.setText(getString(R.string.units_format, course.getUnits()));
         description.setText(displayText(course.getDescription(), "No description"));
         homeworkList = db.HomeworkDao().getHomeworksByCourseId(course.getId());
         adapter = new HomeworkAdapter(homeworkList, getApplicationContext());
@@ -132,6 +133,7 @@ public class CourseActivity extends AppCompatActivity {
         units = findViewById(R.id.course_units);
         teacher = findViewById(R.id.course_teacher);
         description = findViewById(R.id.course_description);
+        homeworkCount = findViewById(R.id.course_homework_count);
         homeworkEmpty = findViewById(R.id.course_homeworks_empty);
         button = findViewById(R.id.enroll);
         recyclerView = findViewById(R.id.course_homeworks);
@@ -155,8 +157,10 @@ public class CourseActivity extends AppCompatActivity {
 
     private void updateHomeworkState() {
         if (!canViewHomeworks) {
+            setHomeworkCount();
             return;
         }
+        setHomeworkCount();
         boolean hasHomeworks = homeworkList != null && !homeworkList.isEmpty();
         recyclerView.setVisibility(hasHomeworks ? View.VISIBLE : View.GONE);
         homeworkEmpty.setText(R.string.empty_homeworks);
@@ -164,9 +168,15 @@ public class CourseActivity extends AppCompatActivity {
     }
 
     private void showHomeworkMessage(int messageResId) {
+        setHomeworkCount();
         recyclerView.setVisibility(View.GONE);
         homeworkEmpty.setText(messageResId);
         homeworkEmpty.setVisibility(View.VISIBLE);
+    }
+
+    private void setHomeworkCount() {
+        int count = homeworkList == null ? 0 : homeworkList.size();
+        homeworkCount.setText(getString(R.string.course_homework_count_format, count));
     }
 
     private String getTeacherName(int teacherId) {

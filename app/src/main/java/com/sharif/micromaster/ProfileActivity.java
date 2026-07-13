@@ -25,6 +25,8 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
     TextView name;
     TextView email;
     TextView coursesEmpty;
+    TextView role;
+    TextView courseCount;
     RecyclerView recyclerView;
     de.hdodenhof.circleimageview.CircleImageView imageView;
     List<Course> courseList;
@@ -65,8 +67,9 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
         if (loggedIn.getImage() != null && !loggedIn.getImage().isEmpty()) {
             imageView.setImageBitmap(BitmapHelper.stringToBitmap(loggedIn.getImage()));
         }
-        name.setText(loggedIn.getName());
-        email.setText(loggedIn.getEmail());
+        name.setText(displayText(loggedIn.getName(), "Unknown user"));
+        email.setText(displayText(loggedIn.getEmail(), "No email"));
+        role.setText(getString(R.string.role_format, roleName(loggedIn.getUserType())));
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         courseList = new ArrayList<>();
@@ -108,6 +111,8 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
     private void findViews() {
         name = findViewById(R.id.profile_name);
         email = findViewById(R.id.profile_email);
+        role = findViewById(R.id.profile_role);
+        courseCount = findViewById(R.id.profile_course_count);
         coursesEmpty = findViewById(R.id.profile_courses_empty);
         recyclerView = findViewById(R.id.profile_courses);
         imageView = findViewById(R.id.profile_image);
@@ -118,8 +123,27 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
 
     private void updateCourseListState() {
         boolean hasCourses = courseList != null && !courseList.isEmpty();
+        int count = courseList == null ? 0 : courseList.size();
+        courseCount.setText(getString(R.string.profile_course_count_format, count));
         recyclerView.setVisibility(hasCourses ? View.VISIBLE : View.GONE);
         coursesEmpty.setVisibility(hasCourses ? View.GONE : View.VISIBLE);
+    }
+
+    private String roleName(int userType) {
+        if (userType == 0) {
+            return "Teacher";
+        }
+        if (userType == 1) {
+            return "TA";
+        }
+        return "Student";
+    }
+
+    private String displayText(String value, String fallback) {
+        if (value == null || value.trim().isEmpty()) {
+            return fallback;
+        }
+        return value.trim();
     }
 
     private void goToLogin() {

@@ -1,67 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fillViewport="true"
     tools:context=".AddCourseActivity">
 
-
-    <EditText
-        android:id="@+id/addCourseName"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="105dp"
-        android:ems="10"
-        android:hint="Course Name"
-        android:inputType="text"
-        android:minHeight="48dp" />
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:paddingStart="28dp"
+        android:paddingTop="32dp"
+        android:paddingEnd="28dp"
+        android:paddingBottom="32dp">
 
-    <EditText
-        android:id="@+id/addCourseUnits"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="199dp"
-        android:ems="10"
-        android:hint="Number of Units"
-        android:inputType="number"
-        android:minHeight="48dp" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/add_course_title"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textSize="28sp"
+            android:textStyle="bold" />
 
-    <EditText
-        android:id="@+id/addCourseDescription"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="308dp"
-        android:ems="10"
-        android:hint="Description"
-        android:inputType="text"
-        android:minHeight="48dp" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:lineSpacingExtra="3dp"
+            android:text="@string/add_course_subtitle"
+            android:textSize="16sp" />
 
-    <Button
-        android:id="@+id/submit_course"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="70dp"
-        android:layout_marginBottom="206dp"
-        android:text="Submit" />
+        <EditText
+            android:id="@+id/addCourseName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:hint="Course name"
+            android:inputType="textCapWords"
+            android:minHeight="56dp"
+            android:singleLine="true" />
 
-    <Button
-        android:id="@+id/cancel_submission"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginEnd="70dp"
-        android:layout_marginBottom="206dp"
-        android:text="Cancel" />
-</RelativeLayout>
+        <EditText
+            android:id="@+id/addCourseUnits"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:hint="Number of units"
+            android:inputType="number"
+            android:minHeight="56dp"
+            android:singleLine="true" />
+
+        <EditText
+            android:id="@+id/addCourseDescription"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:layout_marginTop="12dp"
+            android:gravity="start|top"
+            android:hint="Description"
+            android:inputType="textMultiLine|textCapSentences"
+            android:minHeight="96dp"
+            android:paddingTop="12dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:baselineAligned="false"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/cancel_submission"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:minHeight="52dp"
+                android:text="Cancel" />
+
+            <Button
+                android:id="@+id/submit_course"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:minHeight="52dp"
+                android:text="Submit" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>

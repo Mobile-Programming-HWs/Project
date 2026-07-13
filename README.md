@@ -8,14 +8,14 @@ Android course management app for the final Mobile Programming project.
 - Lets teachers create courses and add homework links.
 - Lets students enroll in courses.
 - Lets TAs request course access. Only approved TAs can add homework.
-- Shows user profile details and related courses.
+- Shows user role, course counts, related courses, homework counts, and homework file status.
 
 ## Setup
 
 Install:
 
 - Android Studio
-- JDK 11
+- JDK 17
 - Android SDK Platform 32
 
 Build from PowerShell:

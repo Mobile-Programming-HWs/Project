@@ -1,65 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fillViewport="true"
     tools:context=".AddHomeworkActivity">
 
-    <TextView
-        android:id="@+id/homework_creator"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="90dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:minHeight="48dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="71dp" />
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:paddingStart="28dp"
+        android:paddingTop="32dp"
+        android:paddingEnd="28dp"
+        android:paddingBottom="32dp">
 
-    <EditText
-        android:id="@+id/homework_description"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="189dp"
-        android:ems="10"
-        android:gravity="start|top"
-        android:hint="Description"
-        android:inputType="textMultiLine"
-        android:minHeight="48dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="156dp" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/add_homework_title"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textSize="28sp"
+            android:textStyle="bold" />
 
-    <EditText
-        android:id="@+id/homework_link"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="266dp"
-        android:ems="10"
-        android:hint="download link"
-        android:inputType="textUri"
-        android:minHeight="48dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="356dp" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:lineSpacingExtra="3dp"
+            android:text="@string/add_homework_subtitle"
+            android:textSize="16sp" />
 
-    <Button
-        android:id="@+id/submit_homework"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="127dp"
-        android:text="Submit"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="486dp" />
-</RelativeLayout>
+        <TextView
+            android:id="@+id/homework_creator"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textSize="16sp"
+            tools:text="By Teacher" />
+
+        <EditText
+            android:id="@+id/homework_description"
+            android:layout_width="match_parent"
+            android:layout_height="132dp"
+            android:layout_marginTop="16dp"
+            android:gravity="start|top"
+            android:hint="Description"
+            android:inputType="textMultiLine|textCapSentences"
+            android:minHeight="96dp"
+            android:paddingTop="12dp" />
+
+        <EditText
+            android:id="@+id/homework_link"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:hint="Download link"
+            android:inputType="textUri"
+            android:minHeight="56dp"
+            android:singleLine="true" />
+
+        <Button
+            android:id="@+id/submit_homework"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:minHeight="52dp"
+            android:text="Submit" />
+
+    </LinearLayout>
+
+</ScrollView>

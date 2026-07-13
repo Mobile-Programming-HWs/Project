@@ -24,6 +24,7 @@ public class CoursesListActivity extends AppCompatActivity implements Navigation
 
     RecyclerView recycler;
     TextView coursesEmpty;
+    TextView coursesCount;
     List<Course> courseList;
     RecyclerView.Adapter adapter;
     FloatingActionButton fab;
@@ -50,6 +51,7 @@ public class CoursesListActivity extends AppCompatActivity implements Navigation
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         recycler = findViewById(R.id.recyclerView);
         coursesEmpty = findViewById(R.id.courses_empty);
+        coursesCount = findViewById(R.id.courses_count);
         recycler.setHasFixedSize(true);
         recycler.setLayoutManager(new LinearLayoutManager(this));
 
@@ -72,9 +74,12 @@ public class CoursesListActivity extends AppCompatActivity implements Navigation
                 })
         );
 
+        User loggedIn = getLoggedInUser();
+        boolean canAddCourse = loggedIn != null && loggedIn.getUserType() == 0;
+        fab.setVisibility(canAddCourse ? View.VISIBLE : View.GONE);
         fab.setOnClickListener(view -> {
-            User loggedIn = db.UserDao().getUserById(db.LoggedInUserDao().user().getUserID());
-            if (loggedIn.getUserType() == 0) {
+            User currentUser = getLoggedInUser();
+            if (currentUser != null && currentUser.getUserType() == 0) {
                 Intent intent = new Intent(CoursesListActivity.this, AddCourseActivity.class);
                 startActivityForResult(intent, 11);
             } else {
@@ -100,8 +105,18 @@ public class CoursesListActivity extends AppCompatActivity implements Navigation
 
     private void updateCourseListState() {
         boolean hasCourses = courseList != null && !courseList.isEmpty();
+        int count = courseList == null ? 0 : courseList.size();
+        coursesCount.setText(getString(R.string.courses_count_format, count));
         recycler.setVisibility(hasCourses ? View.VISIBLE : View.GONE);
         coursesEmpty.setVisibility(hasCourses ? View.GONE : View.VISIBLE);
+    }
+
+    private User getLoggedInUser() {
+        LoggedInUser session = db.LoggedInUserDao().user();
+        if (session == null) {
+            return null;
+        }
+        return db.UserDao().getUserById(session.getUserID());
     }
 
     @Override

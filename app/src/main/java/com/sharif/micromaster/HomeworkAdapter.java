@@ -49,9 +49,16 @@ public class HomeworkAdapter extends RecyclerView.Adapter<HomeworkAdapter.MyView
             bindMissingHomework(holder);
             return;
         }
+        Context viewContext = holder.itemView.getContext();
         holder.description.setText(displayText(homework.getDescription(), "No description"));
-        holder.creator.setText(findCreatorName(homework));
+        holder.creator.setText(viewContext.getString(
+                R.string.homework_creator_format,
+                findCreatorName(homework)
+        ));
         boolean canDownload = isValidDownloadLink(homework.getPdfLink());
+        holder.fileStatus.setText(canDownload
+                ? fileStatusText(viewContext, homework.getPdfLink())
+                : viewContext.getString(R.string.homework_file_missing));
         holder.button.setEnabled(canDownload);
         holder.button.setText(canDownload ? "Download" : "No file");
         holder.button.setOnClickListener(new View.OnClickListener() {
@@ -95,8 +102,10 @@ public class HomeworkAdapter extends RecyclerView.Adapter<HomeworkAdapter.MyView
     }
 
     private void bindMissingHomework(MyViewHolder holder) {
+        Context viewContext = holder.itemView.getContext();
         holder.description.setText("No description");
-        holder.creator.setText("Unknown creator");
+        holder.creator.setText(viewContext.getString(R.string.homework_creator_format, "Unknown creator"));
+        holder.fileStatus.setText(viewContext.getString(R.string.homework_file_missing));
         holder.button.setText("No file");
         holder.button.setEnabled(false);
         holder.button.setOnClickListener(null);
@@ -126,6 +135,14 @@ public class HomeworkAdapter extends RecyclerView.Adapter<HomeworkAdapter.MyView
         return uri.getHost() != null && ("http".equalsIgnoreCase(scheme) || "https".equalsIgnoreCase(scheme));
     }
 
+    private String fileStatusText(Context viewContext, String pdfLink) {
+        String trimmedLink = pdfLink.trim();
+        Uri uri = Uri.parse(trimmedLink);
+        String host = displayText(uri.getHost(), "link");
+        String fileName = URLUtil.guessFileName(trimmedLink, null, null);
+        return viewContext.getString(R.string.homework_file_ready) + ": " + host + "/" + fileName;
+    }
+
     private String displayText(String value, String fallback) {
         if (value == null || value.trim().isEmpty()) {
             return fallback;
@@ -134,13 +151,14 @@ public class HomeworkAdapter extends RecyclerView.Adapter<HomeworkAdapter.MyView
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView description, creator;
+        TextView description, creator, fileStatus;
         Button button;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             description = itemView.findViewById(R.id.hw_description);
             creator = itemView.findViewById(R.id.hw_name);
+            fileStatus = itemView.findViewById(R.id.hw_file_status);
             button = itemView.findViewById(R.id.hw_download);
         }
     }

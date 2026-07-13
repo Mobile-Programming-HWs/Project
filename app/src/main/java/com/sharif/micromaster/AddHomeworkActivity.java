@@ -40,19 +40,25 @@ public class AddHomeworkActivity extends AppCompatActivity {
             finish();
             return;
         }
-        creator.setText("Creator: " + loggedIn.getName());
+        creator.setText(getString(R.string.homework_creator_format, loggedIn.getName()));
         submit.setOnClickListener(view -> {
+            String note = description.getText().toString().trim();
             String pdfLink = link.getText().toString().trim();
+            description.setError(null);
+            link.setError(null);
+            if (note.isEmpty()) {
+                description.setError("Please enter description");
+                return;
+            }
             if (pdfLink.isEmpty()) {
-                Toast.makeText(this, "Link cannot be empty", Toast.LENGTH_SHORT).show();
+                link.setError("Link cannot be empty");
                 return;
             }
             if (!isHttpLink(pdfLink)) {
-                Toast.makeText(this, "Enter a valid http or https link", Toast.LENGTH_SHORT).show();
+                link.setError("Enter a valid http or https link");
                 return;
             }
-            Homework homework = new Homework(course.getId(), loggedIn.getId(), description.getText().toString().trim(),
-                    pdfLink);
+            Homework homework = new Homework(course.getId(), loggedIn.getId(), note, pdfLink);
             db.HomeworkDao().insert(homework);
             Toast.makeText(this, "Success!", Toast.LENGTH_SHORT).show();
             setResult(RESULT_OK);
