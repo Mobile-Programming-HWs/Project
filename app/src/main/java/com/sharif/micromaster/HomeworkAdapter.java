@@ -6,17 +6,15 @@ import static android.content.Context.DOWNLOAD_SERVICE;
 
 import android.app.DownloadManager;
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
-import android.util.Log;
+import android.webkit.URLUtil;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -47,18 +45,42 @@ public class HomeworkAdapter extends RecyclerView.Adapter<HomeworkAdapter.MyView
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         final Homework homework = homeworkList.get(position);
         holder.description.setText(homework.getDescription());
-        holder.creator.setText(db.UserDao().getUserById(homework.getCreator()).getName());
+        User creator = db.UserDao().getUserById(homework.getCreator());
+        if (creator == null) {
+            holder.creator.setText("Unknown creator");
+        } else {
+            holder.creator.setText(creator.getName());
+        }
         holder.button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DownloadManager.Request r = new DownloadManager.Request(Uri.parse(homework.getPdfLink()));
-                r.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "homeworks");
-                r.allowScanningByMediaScanner();
-                r.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-                DownloadManager dm = (DownloadManager) context.getSystemService(DOWNLOAD_SERVICE);
-                dm.enqueue(r);
+                startDownload(homework.getPdfLink());
             }
         });
+    }
+
+    private void startDownload(String pdfLink) {
+        Uri uri = Uri.parse(pdfLink);
+        String scheme = uri.getScheme();
+        if (uri.getHost() == null || !("http".equalsIgnoreCase(scheme) || "https".equalsIgnoreCase(scheme))) {
+            Toast.makeText(context, "Homework link is not valid", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        try {
+            DownloadManager.Request request = new DownloadManager.Request(uri);
+            String fileName = URLUtil.guessFileName(pdfLink, null, null);
+            request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName);
+            request.allowScanningByMediaScanner();
+            request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+            DownloadManager downloadManager = (DownloadManager) context.getSystemService(DOWNLOAD_SERVICE);
+            if (downloadManager == null) {
+                Toast.makeText(context, "Download service is not available", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            downloadManager.enqueue(request);
+        } catch (IllegalArgumentException e) {
+            Toast.makeText(context, "Homework link is not valid", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
