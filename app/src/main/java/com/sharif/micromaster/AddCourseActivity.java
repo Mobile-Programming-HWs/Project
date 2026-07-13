@@ -28,14 +28,45 @@ public class AddCourseActivity extends AppCompatActivity {
         db = Database.getInstance(this);
         findViews();
         submit.setOnClickListener(view -> {
-            if (name.getText().toString().isEmpty() || units.getText().toString().isEmpty()) {
+            String courseName = name.getText().toString().trim();
+            String courseDescription = description.getText().toString().trim();
+            String unitText = units.getText().toString().trim();
+            if (courseName.isEmpty()) {
+                name.setError("Please enter course name");
                 return;
             }
-            User loggedIn = db.UserDao().getUserById(db.LoggedInUserDao().user().getUserID());
+            if (courseDescription.isEmpty()) {
+                description.setError("Please enter description");
+                return;
+            }
+            int unitCount;
+            try {
+                unitCount = Integer.parseInt(unitText);
+            } catch (NumberFormatException e) {
+                units.setError("Please enter a valid number");
+                return;
+            }
+            if (unitCount < 1 || unitCount > 6) {
+                units.setError("Units must be between 1 and 6");
+                return;
+            }
+            LoggedInUser session = db.LoggedInUserDao().user();
+            if (session == null) {
+                Toast.makeText(this, "No user is logged in", Toast.LENGTH_SHORT).show();
+                finish();
+                return;
+            }
+            User loggedIn = db.UserDao().getUserById(session.getUserID());
+            if (loggedIn == null) {
+                db.LoggedInUserDao().deleteAll();
+                Toast.makeText(this, "User not found", Toast.LENGTH_SHORT).show();
+                finish();
+                return;
+            }
             Drawable d = getResources().getDrawable(R.drawable.ic_launcher_foreground);
             bitmap = drawableToBitmap(d);
-            Course course = new Course(loggedIn.getId(), name.getText().toString(), description.getText().toString(),
-                    Integer.parseInt(units.getText().toString()), BitmapHelper.bitmapToString(bitmap));
+            Course course = new Course(loggedIn.getId(), courseName, courseDescription,
+                    unitCount, BitmapHelper.bitmapToString(bitmap));
             db.CourseDao().insert(course);
             Toast.makeText(this, "Success!", Toast.LENGTH_SHORT).show();
             finish();
