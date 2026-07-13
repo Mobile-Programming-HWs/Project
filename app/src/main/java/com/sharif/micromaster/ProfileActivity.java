@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -46,7 +47,19 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        User loggedIn = db.UserDao().getUserById(db.LoggedInUserDao().user().getUserID());
+        LoggedInUser session = db.LoggedInUserDao().user();
+        if (session == null) {
+            Toast.makeText(this, "No user is logged in", Toast.LENGTH_SHORT).show();
+            goToLogin();
+            return;
+        }
+        User loggedIn = db.UserDao().getUserById(session.getUserID());
+        if (loggedIn == null) {
+            db.LoggedInUserDao().deleteAll();
+            Toast.makeText(this, "User not found", Toast.LENGTH_SHORT).show();
+            goToLogin();
+            return;
+        }
         if (loggedIn.getImage() != null && !loggedIn.getImage().isEmpty()) {
             imageView.setImageBitmap(BitmapHelper.stringToBitmap(loggedIn.getImage()));
         }
@@ -76,13 +89,14 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
             List<Enrollment> enrollments = db.EnrollmentDao().getUsersCourses(loggedIn.getId());
             for (Enrollment enrollment: enrollments) {
                 Course course = db.CourseDao().getCourse(enrollment.getCourseId());
-                courseList.add(course);
+                if (course != null) {
+                    courseList.add(course);
+                }
             }
         }
         logout.setOnClickListener(view -> {
             db.LoggedInUserDao().deleteAll();
-            Intent intent = new Intent(ProfileActivity.this, MainActivity.class);
-            startActivity(intent);
+            goToLogin();
         });
         adapter = new CustomAdapter(courseList, getApplicationContext());
         recyclerView.setAdapter(adapter);
@@ -96,6 +110,13 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
         drawerLayout = findViewById(R.id.profile_drawer);
         navigationView = findViewById(R.id.nav_prof);
         logout = findViewById(R.id.logout);
+    }
+
+    private void goToLogin() {
+        Intent intent = new Intent(ProfileActivity.this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
     }
 
     @Override

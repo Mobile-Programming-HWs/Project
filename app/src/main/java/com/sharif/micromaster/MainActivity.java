@@ -24,8 +24,12 @@ public class MainActivity extends AppCompatActivity {
         db = Database.getInstance(this);
         LoggedInUser logged = db.LoggedInUserDao().user();
         if (logged != null) {
-            Intent intent = new Intent(this, CoursesListActivity.class);
-            startActivity(intent);
+            User user = db.UserDao().getUserById(logged.getUserID());
+            if (user == null) {
+                db.LoggedInUserDao().deleteAll();
+            } else {
+                openCourses();
+            }
         }
         login.setOnClickListener(view -> {
             boolean isValid = true;
@@ -61,8 +65,14 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(MainActivity.this, "Success!", Toast.LENGTH_SHORT).show();
         db.LoggedInUserDao().deleteAll();
         db.LoggedInUserDao().insert(new LoggedInUser(user.getId()));
+        openCourses();
+    }
+
+    private void openCourses() {
         Intent intent = new Intent(this, CoursesListActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
+        finish();
     }
 
 
